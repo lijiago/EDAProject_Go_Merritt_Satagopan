@@ -1,0 +1,72 @@
+---
+title: "Two-Sample T Test"
+author: "Li Jia Go"
+date: "2022-11-26"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+install.packages('formatR')
+library(formatR)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
+```
+
+## Research Question
+
+Do the mean sizes of large wildfires in Colorado differ between 2000 and 2018?
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+USFireData <- read.csv("./Data/Processed/US_FireData_Processed.csv", 
+                stringsAsFactors = TRUE) 
+
+#filtering dataset for wildfires in California in years 1988 and 2000
+California.Wildfires <- USFireData %>%
+  filter(STATE %in% "CA") %>%
+  filter(FIRE_TYPE %in% "Wildfire") %>%
+  filter(YEAR %in% c("1988", "2000"))
+
+#data exploration 
+ggplot(California.Wildfires, aes(x = ACRES, color =as.factor(YEAR))) +
+  geom_freqpoly() +
+  labs(x='Acreage of fires', y='Count', color='Year', 
+       title="Histogram of wildfires in 1988 & 2000, California")  
+  
+
+```
+### Two-sample t-test
+
+The two-sample *t* test is used to test the hypothesis that the mean of two samples is equivalent. Unlike the one-sample tests, a two-sample test requires a second assumption that the variance of the two groups is equivalent. 
+H0: means are equal
+h1: means are not equal. 
+
+For example, we might ask ourselves (from the EPA air quality processed dataset): 
+Are Ozone levels different between 2018 and 2019?
+
+```{r}
+#First let's look at the data
+ggplot(EPAair, aes(x = Ozone, color = as.factor(Year))) +
+  geom_freqpoly()
+#hard to tell if mean is the same for both plots
+
+
+#Format as a t-test
+#EPAair$Ozone will be our continuous dependent variable
+#EPAair$Year will be our categorical variable with two levels (2018 and 2019)
+O3.twosample <- t.test(EPAair$Ozone ~ EPAair$Year)
+O3.twosample
+#p <0.05, reject null, accept alternative that 2 means are not equal. alternative hypothesis: true difference in means between group 2018 and group 2019 is not equal to 0
+
+
+RawUSFireData <- read.csv("./Data/Raw/US_FireData_Raw.csv", 
+                stringsAsFactors = TRUE) 
+# Format as a GLM
+O3.twosample2 <- lm(EPAair$Ozone ~ EPAair$Year) #ask if year is predictor of ozone level ? 
+summary(O3.twosample2)
+#for EPAair$year: p value <0.05, year is statistically different from 0 and is a predictor of ozone level
+
