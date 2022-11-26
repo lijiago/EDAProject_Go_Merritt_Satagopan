@@ -31,6 +31,7 @@ library(tidyverse)
 library(agricolae)
 library(lubridate)
 library(cowplot)
+library(formatR)
 install.packages("corrplot")
 library(corrplot)
 library(dplyr)
@@ -63,8 +64,12 @@ Prescribed_data <- Fire_data %>%
 
 # We want to figure out which two states have the most wildfires
 
-Wildfire_data %>%
+Count_per_state <- Wildfire_data %>%
   count(STATE)
+
+Wildfires_state_plot <- ggplot(Count_per_state, aes(x = STATE, y = n)) + 
+  geom_bar() 
+print(Wildfires_state_plot)
 
 # Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states. 
 
@@ -75,15 +80,14 @@ States_Wildfire_data <- Wildfire_data %>%
 
 Mean_wildfire_size_state <- States_Wildfire_data %>%
   group_by(STATE, YEAR) %>%
-  summarise(Mean_wildfire_size = mean(ACRES))
-
+  summarise(Mean_wildfire_size = mean(ACRES)) 
 
 
 #need to make years into a date*****
 
 Exploratory_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wildfire_size, color = STATE)) + 
   geom_line() +
-  scale_x_date(date_breaks = "1 year") 
+  scale_x_date(date_breaks = "1 year", labels = date_format("%Y")) 
 print(Exploratory_plot)
 
 ```
