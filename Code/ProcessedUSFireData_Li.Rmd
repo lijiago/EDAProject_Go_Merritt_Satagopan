@@ -1,0 +1,42 @@
+---
+title: "Code for first cut processing of US Fire Data"
+author: "Li Jia Go"
+date: "2022-11-26"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+install.packages('formatR')
+library(formatR)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+
+#load and raw fire data file, convert strings to factor
+USFireData <- read.csv("./Data/Raw/US_FireData_Raw.csv", 
+                stringsAsFactors = TRUE) 
+
+#selecting columns relevant to our data analysis
+USFireData.shortened <- USFireData %>% 
+  select(OBJECTID:FIRE_TYPE, LATITUDE, LONGITUDE)
+
+#selecting first 2 letters of FIRE_ID data 
+USFireData.shortened$FIRE_ID <-substr(USFireData.shortened$FIRE_ID, 1, 2)
+
+#renaming FIRE_ID column to STATE
+USFireData.processed <- USFireData.shortened %>%
+        rename("STATE" = "FIRE_ID")
+
+#saving processed dataset into processed folder
+write.csv(USFireData.processed, row.names=FALSE, 
+          file="./Data/Processed/US_FireData_Processed.csv")
+
+
+```
+
+
