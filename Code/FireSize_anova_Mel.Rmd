@@ -1,0 +1,107 @@
+---
+title: "Fire Size ANOVA"
+author: "Melissa Merritt"
+date: "2022-11-26"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
+
+mytheme <- theme_bw(base_size = 10) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top", 
+        axis.text.x=element_text(angle = 60, hjust = 1)) 
+theme_set(mytheme)
+```
+
+## Set-Up 
+```{r}
+
+# Check my working directory 
+
+getwd()
+
+# Library the packages needed to run my plots and code
+
+library(tidyverse)
+library(agricolae)
+library(lubridate)
+library(cowplot)
+install.packages("corrplot")
+library(corrplot)
+library(dplyr)
+library(scales)
+```
+
+## Research Question 
+
+Research question: Is there a difference between wildfire sizes in the 3 states with the most wildfire occurrences?
+
+Null Hypothesis: There is no significant differences between wildfire sizes in the 3 states with the most wildfire occurrences.
+
+Hypothesis: There is a significant difference between wildfire sizes in the 3 states with the most wildfire occurrences.
+
+```{r}
+# Use read.csv() function to read in the processed dataset 
+Fire_data <- read.csv("./Data/Processed/US_FireData_Processed.csv")
+```
+
+
+## Exploratory Analysis 
+```{r}
+# We want to only include wildfires, so we need to wrangle the data using the filter() function. 
+
+Wildfire_data <- Fire_data %>%
+  filter(FIRE_TYPE == "Wildfire")
+
+Prescribed_data <- Fire_data %>%
+  filter(FIRE_TYPE == "Prescribed Fire")
+
+# We want to figure out which two states have the most wildfires
+
+Wildfire_data %>%
+  count(STATE)
+
+# Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states. 
+
+States_Wildfire_data <- Wildfire_data %>%
+  filter(STATE == "CA" | STATE == "NV" | STATE == "ID")
+
+# Now we need to wrangle the data, to get the mean wildfire sizes (acres) for the states with the most occurrences
+
+Mean_wildfire_size_state <- States_Wildfire_data %>%
+  group_by(STATE, YEAR) %>%
+  summarise(Mean_wildfire_size = mean(ACRES))
+
+
+
+#need to make years into a date*****
+
+Exploratory_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wildfire_size, color = STATE)) + 
+  geom_line() +
+  scale_x_date(date_breaks = "1 year") 
+print(Exploratory_plot)
+
+```
+
+
+## Analysis
+```{r}
+
+# Run the first ANOVA using the aov() function
+
+FireSize_ANOVA <- aov(data = States_Wildfire_data, ACRES ~ STATE)
+summary(FireSize_ANOVA)
+
+# Run the same ANOVA using the the lm() function to get more details
+
+FireSize_ANOVA2 <- lm(data = States_Wildfire_data, ACRES ~ STATE)
+summary(FireSize_ANOVA2)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
