@@ -6,7 +6,20 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
+#Uploading necessary packages
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(dplyr)
+#library(tseries)
+
 knitr::opts_chunk$set(echo = TRUE)
+
+# Setting my theme
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+theme_set(mytheme)
 ```
 
 ## R Markdown
@@ -15,16 +28,95 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+```{r California Fires}
+all_fires <- read.csv("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Data/Processed/US_FireData_Processed.csv",
+                           stringsAsFactors = TRUE)
+
+summary(all_fires)
+
+all_cal_fires <- all_fires %>%
+  filter(STATE=="CA")
+
+summary(all_cal_fires)
+
+cal_fires <- all_cal_fires %>%
+  filter(FIRE_TYPE=="Wildfire" | FIRE_TYPE=="Prescribed Fire" | FIRE_TYPE=="Wildland Fire Use") %>%
+  mutate(Date = my(paste(STARTMONTH,"-",YEAR)))
+
+summary(cal_fires)
+
+wildfires_ca <- cal_fires %>%
+  filter(FIRE_TYPE=="Wildfire")
+
+prescribed_fires_ca <- cal_fires %>%
+  filter(FIRE_TYPE=="Prescribed Fire")
+
+wildland_fires_ca <- cal_fires %>%
+filter(FIRE_TYPE=="Wildland Fire Use")
+
 ```
 
 ## Including Plots
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r time plot, echo=FALSE}
+#Wildfire Fires 1984-2007
+wildfire_plot <- 
+  ggplot(wildfires_ca, aes(x = Date, y = ACRES)) +
+  geom_line() +
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = paste("Wildfire Area"),
+       y="years",
+       x="Burnt Area in Acres")+
+  theme(plot.title = element_text(size = 40))+
+  theme(plot.title = element_text(hjust = 0.5))
+
+print(wildfire_plot)
+
+ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/wildfire_plot.jpg", wildfire_plot, height = 7, width = 8, units = "in", dpi = 300)
+
+#Prescribed Fires 1984-2007
+prescribed_fire_plot <- 
+  ggplot(prescribed_fires_ca, aes(x = Date, y = ACRES)) +
+  geom_line() +
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = paste("Prescribed Fire Area"),
+       y="years",
+       x="Burnt Area in Acres")+
+  theme(plot.title = element_text(size = 40))+
+  theme(plot.title = element_text(hjust = 0.5))
+
+print(prescribed_fire_plot)
+
+ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/prescribed_fire_plot.jpg", prescribed_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
+
+#Large data gaps, so no time series analysis
+wildland_fire_plot <-
+  ggplot(wildland_fires_ca, aes(x = Date, y = ACRES)) +
+  geom_line() +
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = paste("Burnt Wildland Use Fire Area"),
+       y="years",
+       x="Burnt Area in Acres")+
+  theme(plot.title = element_text(size = 40))+
+  theme(plot.title = element_text(hjust = 0.5))
+
+print(wildland_fire_plot)
+
+ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/wildland_fire_plot.jpg", wildland_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
+
+```
+```{r}
+#Plotted together
+
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r time series}
+
+Wildfire_ts <- ts(wildfires_ca$ACRES, start = c(1985,1), frequency = 365)
+plot(Wildfire_ts)
+
+```
