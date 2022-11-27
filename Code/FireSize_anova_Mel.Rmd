@@ -65,10 +65,12 @@ Prescribed_data <- Fire_data %>%
 # We want to figure out which two states have the most wildfires
 
 Count_per_state <- Wildfire_data %>%
-  count(STATE)
+  count(STATE) %>%
 
-Wildfires_state_plot <- ggplot(Count_per_state, aes(x = STATE, y = n)) + 
-  geom_bar() 
+colnames(Count_per_state)[2] = "count"
+
+Wildfires_state_plot <- ggplot(Count_per_state) + 
+  geom_bar(aes(x = STATE))
 print(Wildfires_state_plot)
 
 # Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states. 
@@ -85,11 +87,12 @@ Mean_wildfire_size_state <- States_Wildfire_data %>%
 
 #need to make years into a date*****
 
-Exploratory_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wildfire_size, color = STATE)) + 
-  geom_line() +
-  scale_x_date(date_breaks = "1 year", labels = date_format("%Y")) 
+Exploratory_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wildfire_size, color = STATE)) +
+  geom_line() + 
+  xlab("Year") +
+  ylab("Mean Wildfire Size (Acres)") +
+  labs(title = "Mean Wildfire Size for California, Idaho, and Nevada")
 print(Exploratory_plot)
-
 ```
 
 
