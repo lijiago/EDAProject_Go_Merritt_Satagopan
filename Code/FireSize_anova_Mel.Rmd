@@ -69,9 +69,15 @@ Count_per_state <- Wildfire_data %>%
 
 colnames(Count_per_state)[2] = "count"
 
-Wildfires_state_plot <- ggplot(Count_per_state) + 
-  geom_bar(aes(x = STATE))
+Wildfires_state_plot <- ggplot(Wildfire_data) + 
+  geom_bar(aes(x=STATE)) +
+  theme(axis.text.x=element_text(angle = 60, hjust = 1)) +
+  xlab("State") +
+  ylab("Number of Large Wildfires Between 1984-2018") +
+  labs(title = "Number of Large Wildfires in U.S. Each State Between 1984 and 2018" )
 print(Wildfires_state_plot)
+
+
 
 # Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states. 
 
@@ -98,7 +104,6 @@ print(Exploratory_plot)
 
 ## Analysis
 ```{r}
-
 # Run the first ANOVA using the aov() function
 
 FireSize_ANOVA <- aov(data = States_Wildfire_data, ACRES ~ STATE)
