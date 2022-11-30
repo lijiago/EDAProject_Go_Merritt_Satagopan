@@ -59,15 +59,12 @@ Fire_data <- read.csv("./Data/Processed/US_FireData_Processed.csv")
 Wildfire_data <- Fire_data %>%
   filter(FIRE_TYPE == "Wildfire")
 
-Prescribed_data <- Fire_data %>%
-  filter(FIRE_TYPE == "Prescribed Fire")
-
 # We want to figure out which two states have the most wildfires
 
 Count_per_state <- Wildfire_data %>%
-  count(STATE) %>%
+  count(STATE)
 
-colnames(Count_per_state)[2] = "count"
+# To view the amount of large wildfires for each space we can use ggplot() and within ggplot, the geom_bar() function. We can adjust the text angle with theme(). xlab, ylab, and labs allow us to name the plot and the axes. 
 
 Wildfires_state_plot <- ggplot(Wildfire_data) + 
   geom_bar(aes(x=STATE)) +
@@ -78,26 +75,24 @@ Wildfires_state_plot <- ggplot(Wildfire_data) +
 print(Wildfires_state_plot)
 
 
-
-# Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states. 
+# Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states using the pipe function %>%. 
 
 States_Wildfire_data <- Wildfire_data %>%
   filter(STATE == "CA" | STATE == "NV" | STATE == "ID")
 
-# Now we need to wrangle the data, to get the mean wildfire sizes (acres) for the states with the most occurrences
+# Now we need to wrangle the data, to get the mean wildfire sizes (acres) for the states with the most occurrences. 
 
 Mean_wildfire_size_state <- States_Wildfire_data %>%
   group_by(STATE, YEAR) %>%
   summarise(Mean_wildfire_size = mean(ACRES)) 
 
+# Using the mean wildfire dataset, we can plot the mean fire sizes data for each year. This will give us the line graph of each states mean wildfire sizes and how they have changed over the years. 
 
-#need to make years into a date*****
-
-Exploratory_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wildfire_size, color = STATE)) +
+mean_firesize_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wildfire_size, color = STATE)) +
   geom_line() + 
   xlab("Year") +
   ylab("Mean Wildfire Size (Acres)") +
-  labs(title = "Mean Wildfire Size for California, Idaho, and Nevada")
+  labs(title = "Mean Wildfire Size for California, Idaho, and Nevada from 1984 through 2018")
 print(Exploratory_plot)
 ```
 
