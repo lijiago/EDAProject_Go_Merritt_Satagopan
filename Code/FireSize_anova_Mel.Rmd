@@ -109,6 +109,8 @@ summary(FireSize_ANOVA)
 FireSize_ANOVA2 <- lm(data = States_Wildfire_data, ACRES ~ STATE)
 summary(FireSize_ANOVA2)
 
+#HSD.test then plot the boxplot 
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
