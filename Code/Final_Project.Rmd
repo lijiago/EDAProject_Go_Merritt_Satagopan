@@ -20,6 +20,17 @@
 
 # Rationale and Research Questions
 
+  As disturbance regimes across the United States change, we thought it was important to assess trends, differences, and changes in specific fire regimes. We decided to focus our study on the three states with the most large fire occurrences because...
+
+
+
+**Research Questions:**
+
+**Question 1:** Do the mean sizes of large wildfires in California differ between 1988 and 2000? 
+
+**Question 2:** Is there a difference between large wildfire sizes in the 3 states with the most large wildfire occurrences? (California, Idaho, and Nevada) 
+
+**Question 3:** Is there a trend in large fire occurrences in California from 1984 to 2007? - What is the trend in wildfire, prescribed fires and wildland fire use over the same years? 
 
 
 \newpage
