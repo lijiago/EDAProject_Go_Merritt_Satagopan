@@ -15,9 +15,9 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
 ## Research Question
 
-Do the mean sizes of large wildfires in Colorado differ between 2000 and 2018?
+Do the mean sizes of large wildfires in California differ between 1988 and 2000?
 
-```{r}
+```{r, data exploration}
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
@@ -45,28 +45,13 @@ The two-sample *t* test is used to test the hypothesis that the mean of two samp
 H0: means are equal
 h1: means are not equal. 
 
-For example, we might ask ourselves (from the EPA air quality processed dataset): 
-Are Ozone levels different between 2018 and 2019?
 
-```{r}
-#First let's look at the data
-ggplot(EPAair, aes(x = Ozone, color = as.factor(Year))) +
-  geom_freqpoly()
-#hard to tell if mean is the same for both plots
+```{r, two-sample t test}
 
-
-#Format as a t-test
-#EPAair$Ozone will be our continuous dependent variable
-#EPAair$Year will be our categorical variable with two levels (2018 and 2019)
-O3.twosample <- t.test(EPAair$Ozone ~ EPAair$Year)
-O3.twosample
-#p <0.05, reject null, accept alternative that 2 means are not equal. alternative hypothesis: true difference in means between group 2018 and group 2019 is not equal to 0
+#running two-sample t test
+twosamp.ttest <- t.test(California.Wildfires$ACRES ~ California.Wildfires$YEAR)
+twosamp.ttest
+#p= 0.3754>0.05, we accept the null hypothesis that means are statistically equal for both years. 
 
 
-RawUSFireData <- read.csv("./Data/Raw/US_FireData_Raw.csv", 
-                stringsAsFactors = TRUE) 
-# Format as a GLM
-O3.twosample2 <- lm(EPAair$Ozone ~ EPAair$Year) #ask if year is predictor of ozone level ? 
-summary(O3.twosample2)
-#for EPAair$year: p value <0.05, year is statistically different from 0 and is a predictor of ozone level
-
+```
