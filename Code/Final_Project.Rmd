@@ -83,13 +83,13 @@ Fire_data <- read.csv("./Data/Processed/US_FireData_Processed.csv")
 # Exploratory Analysis 
 
 **Question 1 Exploratory Analysis:** 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 
 ```
 
 
 **Question 2 Exploratory Analysis:** 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 
 # We want to only include wildfires, so we need to wrangle the data using the filter() function. 
 
@@ -135,7 +135,7 @@ print(mean_firesize_plot)
 ```
 
 **Question 3 Exploratory Analysis:** 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 
 ```
 
@@ -148,13 +148,13 @@ print(mean_firesize_plot)
 
 
 ## Question 1: <insert specific question here and add additional subsections for additional questions below, if needed>
-```{r, include=FALSE}
+```{r, echo=FALSE}
 
 ```
 
 
 ## Question 2: 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 # Run the first ANOVA using the aov() function
 
 FireSize_ANOVA <- aov(data = States_Wildfire_data, ACRES ~ STATE)
@@ -190,7 +190,7 @@ print(FireSize_plot)
 
 
 ## Question 3: 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 
 ```
 
