@@ -32,7 +32,6 @@ library(agricolae)
 library(lubridate)
 library(cowplot)
 library(formatR)
-install.packages("corrplot")
 library(corrplot)
 library(dplyr)
 library(scales)
@@ -109,7 +108,26 @@ summary(FireSize_ANOVA)
 FireSize_ANOVA2 <- lm(data = States_Wildfire_data, ACRES ~ STATE)
 summary(FireSize_ANOVA2)
 
-#HSD.test then plot the boxplot 
+
+# Plot the ANOVA to see the residuals vs. fitted
+
+plot(FireSize_ANOVA2)
+
+# Use the HSD.test to extract the groupings for pairwise relationships. 
+
+FireSize_groups <- HSD.test(FireSize_ANOVA, "STATE", group = TRUE)
+FireSize_groups
+
+# Plot the groupings using ggplot() 
+
+FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  stat_summary(geom = "text", fun = max, vjust = -1, size = 3.5,
+               label = c("b", "ab", "a")) +
+  labs(x = "State", y = "Acres") +
+  ylim(0, 20000) 
+print(FireSize_plot)
 
 ```
 

@@ -1,19 +1,43 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 \newpage
 \tableofcontents 
 \newpage
 \listoftables 
+
 \newpage
 \listoffigures 
+
+
 \newpage
 
 ```{r setup, include=FALSE}
 # Set your working directory
 
+getwd()
+
 # Load your packages
+
+library(dplyr)
+library(scales)
+library(formatR)
+library(agricolae)
+library(tidyverse)
 
 # Set your ggplot theme
 
+mytheme <- theme_bw(base_size = 10) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top", 
+        axis.text.x=element_text(angle = 60, hjust = 1)) 
+theme_set(mytheme)
+
 # Load your datasets
+
+Fire_data <- read.csv("./Data/Processed/US_FireData_Processed.csv")
 
 ```
 
@@ -58,6 +82,63 @@
 
 # Exploratory Analysis 
 
+**Question 1 Exploratory Analysis:** 
+```{r, include=FALSE}
+
+```
+
+
+**Question 2 Exploratory Analysis:** 
+```{r, include=FALSE}
+
+# We want to only include wildfires, so we need to wrangle the data using the filter() function. 
+
+Wildfire_data <- Fire_data %>%
+  filter(FIRE_TYPE == "Wildfire")
+
+# We want to figure out which two states have the most wildfires
+
+Count_per_state <- Wildfire_data %>%
+  count(STATE)
+
+# To view the amount of large wildfires for each space we can use ggplot() and within ggplot, the geom_bar() function. We can adjust the text angle with theme(). xlab, ylab, and labs allow us to name the plot and the axes. 
+
+Wildfires_state_plot <- ggplot(Wildfire_data) + 
+  geom_bar(aes(x=STATE)) +
+  theme(axis.text.x=element_text(angle = 60, hjust = 1)) +
+  xlab("State") +
+  ylab("Number of Large Wildfires Between 1984-2018") +
+  labs(title = "Number of Large Wildfires in U.S. Each State Between 1984 and 2018" )
+print(Wildfires_state_plot)
+
+
+# Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states using the pipe function %>%. 
+
+States_Wildfire_data <- Wildfire_data %>%
+  filter(STATE == "CA" | STATE == "NV" | STATE == "ID")
+
+# Now we need to wrangle the data, to get the mean wildfire sizes (acres) for the states with the most occurrences. 
+
+Mean_wildfire_size_state <- States_Wildfire_data %>%
+  group_by(STATE, YEAR) %>%
+  summarise(Mean_wildfire_size = mean(ACRES)) 
+
+# Using the mean wildfire dataset, we can plot the mean fire sizes data for each year. This will give us the line graph of each states mean wildfire sizes and how they have changed over the years. 
+
+mean_firesize_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wildfire_size, color = STATE)) +
+  geom_line() + 
+  xlab("Year") +
+  ylab("Mean Wildfire Size (Acres)") +
+  labs(title = "Mean Wildfire Size for California, Idaho, and Nevada from 1984 through 2018")
+print(mean_firesize_plot)
+
+```
+
+**Question 3 Exploratory Analysis:** 
+```{r, include=FALSE}
+
+```
+
 
 
 \newpage
@@ -67,10 +148,52 @@
 
 
 ## Question 1: <insert specific question here and add additional subsections for additional questions below, if needed>
+```{r, include=FALSE}
+
+```
+
 
 ## Question 2: 
+```{r, include=FALSE}
+# Run the first ANOVA using the aov() function
+
+FireSize_ANOVA <- aov(data = States_Wildfire_data, ACRES ~ STATE)
+summary(FireSize_ANOVA)
+
+# Run the same ANOVA using the the lm() function to get more details
+
+FireSize_ANOVA2 <- lm(data = States_Wildfire_data, ACRES ~ STATE)
+summary(FireSize_ANOVA2)
+
+
+# Plot the ANOVA to see the residuals vs. fitted
+
+plot(FireSize_ANOVA2)
+
+# Use the HSD.test to extract the groupings for pairwise relationships. 
+
+FireSize_groups <- HSD.test(FireSize_ANOVA, "STATE", group = TRUE)
+FireSize_groups
+
+# Plot the groupings using ggplot() 
+
+FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  stat_summary(geom = "text", fun = max, vjust = -1, size = 3.5,
+               label = c("b", "ab", "a")) +
+  labs(x = "State", y = "Acres", title = "Pairwise Relationships between State's Fire Sizes") +
+  ylim(0, 20000) 
+print(FireSize_plot)
+
+```
+
 
 ## Question 3: 
+```{r, include=FALSE}
+
+```
+
 
 
 \newpage
