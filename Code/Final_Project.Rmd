@@ -44,7 +44,9 @@ Fire_data <- read.csv("./Data/Processed/US_FireData_Processed.csv")
 
 # Rationale and Research Questions
 
-  As disturbance regimes across the United States change, we thought it was important to assess trends, differences, and changes in specific fire regimes. We decided to focus our study on the three states with the most large fire occurrences because...
+With climate change, recent observations show an increase in occurrences, severity and extent of wildfires across the United States.As disturbance regimes across the country change, we thought it was important to assess trends, differences, and changes in specific fire regimes. The analysis is aimed at trying to infer any potential differences and trends in the sizes and occurrences of large wildfires through the last few decades. Monitoring any trend in the large fires can help gain an understanding on the health of the landscape and perhaps predicting future incidents. The use of prescribed and wildland fires through the years also gives us an understanding of how they have gained popularity in landscape management over time.  
+
+We decided to identify and focus our study on the three states with the most large fire occurrences (California, Idaho, and Nevada) because that provides us with a larger dataset and better accuracy to derive conclusions.
 
 
 
@@ -54,14 +56,14 @@ Fire_data <- read.csv("./Data/Processed/US_FireData_Processed.csv")
 
 **Question 2:** Is there a difference between large wildfire sizes in the 3 states with the most large wildfire occurrences? (California, Idaho, and Nevada) 
 
-**Question 3:** Is there a trend in large fire occurrences in California from 1984 to 2007? - What is the trend in wildfire, prescribed fires and wildland fire use over the same years? 
+**Question 3:** Is there a trend in large fire occurrences in California from 1984 to 2007? What is the trend in wildfire, prescribed fires and wildland fire use over the same years? 
 
 
 \newpage
 
 # Dataset Information
 
-  The dataset we used in our analysis is titled "Monitoring Trends in Burn Severity Burned Area Boundaries." The United States Forest Service published this data and it was first published on May 4th, 2017, but has since been modified on August 8th, 2022. This data was collected using the Landsat Thematic Mapper and USFS data from each fire incident. This data is a feature layer, so it is geospatial data. This dataset was a part of a project called "Monitoring Trends in Burn Severity (MTBS)" that "assesses the frequency, extent, and magnitude (size and severity) of all large wildland fires." The term large wildland fire includes wildfire, wildland use fires (fires set as a means of suppression), and prescribed burns. The size of a large wildland fire varies; in the western US, a large wildland fire is any fire larger than 1,000 acres; in the eastern US, a large wildland fire is any fire larger than 500 acres. This data covers the entire United States and includes Puerto Rico. 
+  The dataset we used in our analysis is titled "Monitoring Trends in Burn Severity Burned Area Boundaries" (https://www.mtbs.gov/). The United States Forest Service published this data and it was first published on May 4th, 2017, but has since been modified on August 8th, 2022. This data was collected using the Landsat Thematic Mapper and USFS data from each fire incident. This data is a feature layer, so it is geospatial data. This dataset was a part of a project called "Monitoring Trends in Burn Severity (MTBS)" that "assesses the frequency, extent, and magnitude (size and severity) of all large wildland fires." The term large wildland fire includes wildfire, wildland use fires (fires set as a means of suppression), and prescribed burns. The size of a large wildland fire varies; in the western US, a large wildland fire is any fire larger than 1,000 acres; in the eastern US, a large wildland fire is any fire larger than 500 acres. This data covers the entire United States and includes Puerto Rico. 
 
   To wrangle the data, we started by reading the csv file into our rmarkdown document. We then were able to use the pipe function (%>%) with the select() function for the data set to import only the columns we needed for our analysis. These columns included the fire size (acres), fire id, state, fire name, year, start month, start day, fire type, latitude, and longitude. After we had the columns we needed, the next step was to use the substr() function on the fire id column because all we needed from this column was the state abbreviation. Using substr(), we were able to include only the first two characters in the ID. Once we only had the state abbreviations in this column, we renamed the column using the pipe function (%>%) and the rename() function to rename it to STATE. The final step was to use write.csv() to save the processed dataset to our processed folder. 
   
