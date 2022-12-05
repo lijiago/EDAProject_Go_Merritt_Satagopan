@@ -1,4 +1,11 @@
 ---
+title: "Analysis of Large Wildland Fires in California, Nevada, and Idaho"
+authors: "Li Jia Go, Melissa Merritt, and Nanditha Satagopan"
+date: "2022-12-14"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 output:
   pdf_document: default
   html_document: default
@@ -67,7 +74,7 @@ We decided to identify and focus our study on the three states with the most lar
 
   To wrangle the data, we started by reading the csv file into our rmarkdown document. We then were able to use the pipe function (%>%) with the select() function for the data set to import only the columns we needed for our analysis. These columns included the fire size (acres), fire id, state, fire name, year, start month, start day, fire type, latitude, and longitude. After we had the columns we needed, the next step was to use the substr() function on the fire id column because all we needed from this column was the state abbreviation. Using substr(), we were able to include only the first two characters in the ID. Once we only had the state abbreviations in this column, we renamed the column using the pipe function (%>%) and the rename() function to rename it to STATE. The final step was to use write.csv() to save the processed dataset to our processed folder. 
   
-|  Variable   |   Units   |Data Range and Description                    | Data Type       |
+|  Variable   |   Units   |Data Range and/or Description                    | Data Type       |
 |-------------|-----------|----------------------------------------------|-----------------|
 | Fire Size   | Acres     | 500 - 593,364                                | Quantitative    |
 | State       |           | U.S.A. Including Puerto Rico.                | Qualitative     |
