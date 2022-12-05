@@ -1,0 +1,207 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+\newpage
+\tableofcontents 
+\newpage
+\listoftables 
+
+\newpage
+\listoffigures 
+
+
+\newpage
+
+```{r setup, include=FALSE}
+# Set your working directory
+
+getwd()
+
+# Load your packages
+
+library(dplyr)
+library(scales)
+library(formatR)
+library(agricolae)
+library(tidyverse)
+
+# Set your ggplot theme
+
+mytheme <- theme_bw(base_size = 10) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top", 
+        axis.text.x=element_text(angle = 60, hjust = 1)) 
+theme_set(mytheme)
+
+# Load your datasets
+
+Fire_data <- read.csv("./Data/Processed/US_FireData_Processed.csv")
+
+```
+
+
+# Rationale and Research Questions
+
+  As disturbance regimes across the United States change, we thought it was important to assess trends, differences, and changes in specific fire regimes. We decided to focus our study on the three states with the most large fire occurrences because...
+
+
+
+**Research Questions:**
+
+**Question 1:** Do the mean sizes of large wildfires in California differ between 1988 and 2000? 
+
+**Question 2:** Is there a difference between large wildfire sizes in the 3 states with the most large wildfire occurrences? (California, Idaho, and Nevada) 
+
+**Question 3:** Is there a trend in large fire occurrences in California from 1984 to 2007? - What is the trend in wildfire, prescribed fires and wildland fire use over the same years? 
+
+
+\newpage
+
+# Dataset Information
+
+  The dataset we used in our analysis is titled "Monitoring Trends in Burn Severity Burned Area Boundaries." The United States Forest Service published this data and it was first published on May 4th, 2017, but has since been modified on August 8th, 2022. This data was collected using the Landsat Thematic Mapper and USFS data from each fire incident. This data is a feature layer, so it is geospatial data. This dataset was a part of a project called "Monitoring Trends in Burn Severity (MTBS)" that "assesses the frequency, extent, and magnitude (size and severity) of all large wildland fires." The term large wildland fire includes wildfire, wildland use fires (fires set as a means of suppression), and prescribed burns. The size of a large wildland fire varies; in the western US, a large wildland fire is any fire larger than 1,000 acres; in the eastern US, a large wildland fire is any fire larger than 500 acres. This data covers the entire United States and includes Puerto Rico. 
+
+  To wrangle the data, we started by reading the csv file into our rmarkdown document. We then were able to use the pipe function (%>%) with the select() function for the data set to import only the columns we needed for our analysis. These columns included the fire size (acres), fire id, state, fire name, year, start month, start day, fire type, latitude, and longitude. After we had the columns we needed, the next step was to use the substr() function on the fire id column because all we needed from this column was the state abbreviation. Using substr(), we were able to include only the first two characters in the ID. Once we only had the state abbreviations in this column, we renamed the column using the pipe function (%>%) and the rename() function to rename it to STATE. The final step was to use write.csv() to save the processed dataset to our processed folder. 
+  
+|  Variable   |   Units   |Data Range and Description                    | Data Type       |
+|-------------|-----------|----------------------------------------------|-----------------|
+| Fire Size   | Acres     | 500 - 593,364                                | Quantitative    |
+| State       |           | U.S.A. Including Puerto Rico.                | Qualitative     |
+| Fire Name   |           | On Scene Fire Name                           | Qualitative     | 
+| Year        | Year #    | Fire state year                              | Qualitative     | 
+| Start Month | Month #   | Fire start month number                      | Qualitative     | 
+| Start Day   | Day #     | Fire start day number                        | Qualitative     | 
+| Fire Type   |           | Wildfire, Wildland Use Fire, Prescribed Burn | Qualitative     | 
+| Latitude    | Degrees N | 17.957 - 69.465                              | Quantitative    | 
+| Longitude   | Degrees W | -66.129 - -165.881                           | Quantitative    | 
+
+
+\newpage
+
+# Exploratory Analysis 
+
+**Question 1 Exploratory Analysis:** 
+```{r, echo=FALSE}
+
+```
+
+
+**Question 2 Exploratory Analysis:** 
+```{r, echo=FALSE}
+
+# We want to only include wildfires, so we need to wrangle the data using the filter() function. 
+
+Wildfire_data <- Fire_data %>%
+  filter(FIRE_TYPE == "Wildfire")
+
+# We want to figure out which two states have the most wildfires
+
+Count_per_state <- Wildfire_data %>%
+  count(STATE)
+
+# To view the amount of large wildfires for each space we can use ggplot() and within ggplot, the geom_bar() function. We can adjust the text angle with theme(). xlab, ylab, and labs allow us to name the plot and the axes. 
+
+Wildfires_state_plot <- ggplot(Wildfire_data) + 
+  geom_bar(aes(x=STATE)) +
+  theme(axis.text.x=element_text(angle = 60, hjust = 1)) +
+  xlab("State") +
+  ylab("Number of Large Wildfires Between 1984-2018") +
+  labs(title = "Number of Large Wildfires in U.S. Each State Between 1984 and 2018" )
+print(Wildfires_state_plot)
+
+
+# Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states using the pipe function %>%. 
+
+States_Wildfire_data <- Wildfire_data %>%
+  filter(STATE == "CA" | STATE == "NV" | STATE == "ID")
+
+# Now we need to wrangle the data, to get the mean wildfire sizes (acres) for the states with the most occurrences. 
+
+Mean_wildfire_size_state <- States_Wildfire_data %>%
+  group_by(STATE, YEAR) %>%
+  summarise(Mean_wildfire_size = mean(ACRES)) 
+
+# Using the mean wildfire dataset, we can plot the mean fire sizes data for each year. This will give us the line graph of each states mean wildfire sizes and how they have changed over the years. 
+
+mean_firesize_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wildfire_size, color = STATE)) +
+  geom_line() + 
+  xlab("Year") +
+  ylab("Mean Wildfire Size (Acres)") +
+  labs(title = "Mean Wildfire Size for California, Idaho, and Nevada from 1984 through 2018")
+print(mean_firesize_plot)
+
+```
+
+**Question 3 Exploratory Analysis:** 
+```{r, echo=FALSE}
+
+```
+
+
+
+\newpage
+
+# Analysis
+
+
+
+## Question 1: <insert specific question here and add additional subsections for additional questions below, if needed>
+```{r, echo=FALSE}
+
+```
+
+
+## Question 2: 
+```{r, echo=FALSE}
+# Run the first ANOVA using the aov() function
+
+FireSize_ANOVA <- aov(data = States_Wildfire_data, ACRES ~ STATE)
+summary(FireSize_ANOVA)
+
+# Run the same ANOVA using the the lm() function to get more details
+
+FireSize_ANOVA2 <- lm(data = States_Wildfire_data, ACRES ~ STATE)
+summary(FireSize_ANOVA2)
+
+
+# Plot the ANOVA to see the residuals vs. fitted
+
+plot(FireSize_ANOVA2)
+
+# Use the HSD.test to extract the groupings for pairwise relationships. 
+
+FireSize_groups <- HSD.test(FireSize_ANOVA, "STATE", group = TRUE)
+FireSize_groups
+
+# Plot the groupings using ggplot() 
+
+FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  stat_summary(geom = "text", fun = max, vjust = -1, size = 3.5,
+               label = c("b", "ab", "a")) +
+  labs(x = "State", y = "Acres", title = "Pairwise Relationships between State's Fire Sizes") +
+  ylim(0, 20000) 
+print(FireSize_plot)
+
+```
+
+
+## Question 3: 
+```{r, echo=FALSE}
+
+```
+
+
+
+\newpage
+
+# Summary and Conclusions
+
+
+\newpage
+
+# References
+<add references here if relevant, otherwise delete this section> 
