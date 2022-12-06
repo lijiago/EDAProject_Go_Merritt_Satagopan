@@ -17,6 +17,9 @@ output:
 \newpage
 \listoftables 
 
+**Table 1**: Summary of Data Structure
+
+
 \newpage
 \listoffigures 
 
@@ -90,7 +93,9 @@ Is there a trend in large fire occurrences in California from 1984 to 2007? What
 
   To wrangle the data, we started by reading the csv file into our rmarkdown document. We then were able to use the pipe function (%>%) with the select() function for the data set to import only the columns we needed for our analysis. These columns included the fire size (acres), fire id, state, fire name, year, start month, start day, fire type, latitude, and longitude. After we had the columns we needed, the next step was to use the substr() function on the fire id column because all we needed from this column was the state abbreviation. Using substr(), we were able to include only the first two characters in the ID. Once we only had the state abbreviations in this column, we renamed the column using the pipe function (%>%) and the rename() function to rename it to STATE. The final step was to use write.csv() to save the processed dataset to our processed folder. 
   
-|  Variable   |   Units   |Data Range and/or Description                    | Data Type       |
+
+**Table 1**: Summary of Data Structure - This table describes what each column in our wrangle dataset represents. In the data range or description column, the quantitative data has ranges and the qualitative data has descriptions. 
+|  Variable   |   Units   |Data Range or Description                     | Data Type       |
 |-------------|-----------|----------------------------------------------|-----------------|
 | Fire Size   | Acres     | 500 - 593,364                                | Quantitative    |
 | State       |           | U.S.A. Including Puerto Rico.                | Qualitative     |
