@@ -15,11 +15,6 @@ output:
 \newpage
 \listoftables 
 
-**Table 1**:
-**Table 2**:
-**Table 3**:
-
-
 \newpage
 \listoffigures 
 
@@ -226,7 +221,6 @@ H1 (alternative hypothesis): Means between both years are not equal
 
 From the two-sample test, we obtained a p-value of 0.3754, which was more than 0.05. This meant that we would accept the null hypothesis that the means were statistically equal for both years. 
 
-**Table 1**: 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #running two sample t test and printing the result of the test 
 Twosamp.ttest <- t.test(California.Wildfires$ACRES ~ California.Wildfires$YEAR)
@@ -234,10 +228,7 @@ Twosamp.ttest
 
 ```
 
-
 ## Question 2: Is there a difference between large wildfire sizes in the 3 states with the most large wildfire occurrences? (California, Idaho, and Nevada) 
-
-**Table 2**: 
 
 
 **Figure 8**: 
@@ -295,11 +286,6 @@ print(FireSize_plot)
 
 ```
 
-
-**Table 3**: 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-
-```
 
 
 \newpage
