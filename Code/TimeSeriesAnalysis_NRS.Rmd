@@ -182,6 +182,9 @@ plot(wildland_decomp)
 smk_wildfire <- Kendall::SeasonalMannKendall(wildfire_ts)
 summary(smk_wildfire)
 
+#smk_wildfire2 <- trend::smk.test(wildfire_ts)
+#summary(smk_wildfire2)
+
 smk_prescribed <- Kendall::SeasonalMannKendall(prescribed_fire_ts)
 summary(smk_prescribed)
 
