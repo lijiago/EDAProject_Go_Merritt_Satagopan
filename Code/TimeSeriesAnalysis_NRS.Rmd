@@ -4,46 +4,40 @@ author: "Nanditha Ram Satagopan"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
-**Exploratory Analysis**
 
-Insert exploratory visualizations of your dataset. This may include, but is not limited to, graphs illustrating the distributions of variables of interest and/or maps of the spatial context of your dataset. Format your R chunks so that graphs are displayed but code is not displayed. Accompany these graphs with text sections that describe the visualizations and provide context for further analyses.
+**Time Series Analysis of Wildfires in California from 1984-2007**
+Research Question:
+Is there a trend in large fire occurrences in California from 1984 to 2007? What is the trend in wildfire, prescribed fires and wildland fire use over the same years? 
 
-Each figure should be accompanied by a caption, and each figure should be referenced within the text.
+```{r setup, include=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
 
-Scope: think about what information someone might want to know about the dataset before analyzing it statistically. How might you visualize this information?
-
-```{r setup, include=FALSE}
 #Uploading necessary packages
 library(tidyverse)
 library(lubridate)
 library(ggplot2)
 library(dplyr)
-#library(tseries)
 
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
-# Setting my theme
-mytheme <- theme_classic(base_size = 14) +
+mytheme <- theme_bw(base_size = 10) +
   theme(axis.text = element_text(color = "black"), 
-        legend.position = "top")
+        legend.position = "top", 
+        axis.text.x=element_text(angle = 60, hjust = 1)) 
 theme_set(mytheme)
 ```
 
-## R Markdown
+## Wrangling datasets
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r California Fires, echo=FALSE, warning=FALSE, message=FALSE}
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r California Fires}
-
-#Reading in dataset
-all_fires <- read.csv("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Data/Processed/US_FireData_Processed.csv",
+#Reading in the raw dataset
+Fire_data <- read.csv("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Data/Processed/US_FireData_Processed.csv",
                            stringsAsFactors = TRUE)
-summary(all_fires)
+summary(Fire_data)
 
 #Wrangling dataset for California fires only
-all_cal_fires <- all_fires %>%
+all_cal_fires <- Fire_data %>%
   filter(STATE=="CA")
 summary(all_cal_fires)
 
@@ -51,7 +45,7 @@ cal_fires <- all_cal_fires %>%
   filter(FIRE_TYPE=="Wildfire" | FIRE_TYPE=="Prescribed Fire" | FIRE_TYPE=="Wildland Fire Use")
 summary(cal_fires)
 
-#Categorizing fire data
+#Categorizing fire datasets
 
 wildfires_ca <- cal_fires %>%
   filter(FIRE_TYPE=="Wildfire")
@@ -62,104 +56,92 @@ prescribed_fires_ca <- cal_fires %>%
 wildland_fires_ca <- cal_fires %>%
 filter(FIRE_TYPE=="Wildland Fire Use")
 
-#Obtaining mean fires for time series analyses
+#Obtaining mean burn areas for each fire category
 
 wildfires_mean <- 
   wildfires_ca %>%
-  group_by(YEAR, STARTMONTH) %>%
-  summarize(Mean_fires = mean(ACRES)) %>%
-  mutate(Date = my(paste(STARTMONTH,"-",YEAR)))
-view(wildfires_mean)
+  group_by(YEAR) %>%
+  summarize(Mean_fires = mean(ACRES)) # %>%
+  #mutate(Date = my(paste0(STARTMONTH, "-",YEAR))) 
 
 prescribed_fires_mean <- 
   prescribed_fires_ca %>%
   group_by(YEAR, STARTMONTH) %>%
-  summarize(Mean_fires = mean(ACRES)) %>%
-  mutate(Date = my(paste(STARTMONTH,"-",YEAR)))
-view(prescribed_fires_mean)
+  summarize(Mean_fires = mean(ACRES))%>%
+  mutate(Date = my(paste0(STARTMONTH, "-",YEAR))) 
 
 wildland_fires_mean <- 
   wildland_fires_ca %>%
   group_by(YEAR, STARTMONTH) %>%
-  summarize(Mean_fires = mean(ACRES)) %>%
-  mutate(Date = my(paste(STARTMONTH,"-",YEAR)))
-view(wildland_fires_mean)
+  summarize(Mean_fires = mean(ACRES))%>%
+  mutate(Date = my(paste0(STARTMONTH, "-",YEAR))) 
 
 ```
 
-## Including Plots
+#Exploratory Analysis
 
-You can also embed plots, for example:
+```{r exploratory analysis of TSA, echo=FALSE, warning=FALSE, message=FALSE}
 
-```{r time plot, echo=FALSE}
-#Wildfire Fires 1984-2007
+#Plotting Wildfire Fires 1984-2007
+
 wildfire_plot <- 
   ggplot(wildfires_mean, aes(x = Date, y = Mean_fires)) +
   geom_line() +
   geom_smooth(method="loess",se=FALSE) +
-  labs(title = paste("Wildfire Area"),
+  labs(title = "Wildfire Area",
        y="Burnt Area in Acres",
-       x="years")+
-  theme(plot.title = element_text(size = 40))+
+       x="Years") +
+  theme(plot.title = element_text(size = 20))+
   theme(plot.title = element_text(hjust = 0.5))
 
 print(wildfire_plot)
 
 ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/wildfire_plot.jpg", wildfire_plot, height = 7, width = 8, units = "in", dpi = 300)
 
-#Prescribed Fires 1984-2007
+#Plotting Prescribed Fires 1984-2007
+
 prescribed_fire_plot <- 
   ggplot(prescribed_fires_mean, aes(x = Date, y = Mean_fires)) +
   geom_line() +
   geom_smooth(method="loess",se=FALSE) +
-  labs(title = paste("Prescribed Fire Area"),
+  labs(title = "Prescribed Fire Area",
        y="Burnt Area in Acres",
-       x="years")+
-  theme(plot.title = element_text(size = 40))+
+       x="Years") +
+  theme(plot.title = element_text(size = 20))+
   theme(plot.title = element_text(hjust = 0.5))
 
 print(prescribed_fire_plot)
 
 ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/prescribed_fire_plot.jpg", prescribed_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
 
-#Wildland Fires 1984-2007
+#Plotting Wildland Fires 1984-2007
+
 wildland_fire_plot <-
   ggplot(wildland_fires_mean, aes(x = Date, y = Mean_fires)) +
   geom_line() +
   geom_smooth(method="loess",se=FALSE) +
-  labs(title = paste("Burnt Wildland Use Fire Area"),
+  labs(title = "Burnt Wildland Use Fire Area",
        y="Burnt Area in Acres",
-       x="years")+
-  theme(plot.title = element_text(size = 40))+
+       x="Years")+
+  theme(plot.title = element_text(size = 20))+
   theme(plot.title = element_text(hjust = 0.5))
 
 print(wildland_fire_plot)
 
 ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/wildland_fire_plot.jpg", wildland_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
 
-#Large data gaps, so no time series analysis
-```
-```{r}
-#Plotted together
-
-
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Time Series Analysis
 
-**Analysis**
+The time series analysis of the occurences of large wildfires helps us infer if they is any seasonality and/or trend in the variables over time (here, from years 1984-2007).
 
-Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., “Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p < 0.0001)”). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.
-
-Each figure should be accompanied by a caption, and each figure should be referenced within the text.
-
-```{r time series}
+```{r time series, echo=FALSE, warning=FALSE, message=FALSE}
 
 #Wildfire Time Series
-
-wildfire_ts <- ts(wildfires_mean$Mean_fires, start = c(1984,1), frequency = 12)
+wildfire_ts <- ts(wildfires_mean$Mean_fires, start = c(1984), frequency = 1)
 plot(wildfire_ts)
-wildfire_decomp <- stl(Wildfire_ts,s.window = "periodic")
+wildfire_decomp <- stl(wildfire_ts,s.window = "periodic")
 plot(wildfire_decomp)
 
 #Prescribed Fire Time Series
@@ -174,22 +156,26 @@ plot(wildland_fire_ts)
 wildland_decomp <- stl(wildland_fire_ts,s.window = "periodic")
 plot(wildland_decomp)
 
-##Error in stl(wildland_fire_ts, s.window = "periodic") : series is not periodic or has less than two periods
-```
-```{r}
-#Seasonal Mann-Kendall Test to assess whether a set of data values is increasing over time or decreasing over time, and whether the trend in either direction is statistically significant.
-
-smk_wildfire <- Kendall::SeasonalMannKendall(wildfire_ts)
-summary(smk_wildfire)
-
-#smk_wildfire2 <- trend::smk.test(wildfire_ts)
-#summary(smk_wildfire2)
-
-smk_prescribed <- Kendall::SeasonalMannKendall(prescribed_fire_ts)
-summary(smk_prescribed)
-
+##The Prescribed and Wildland Fire time series are not processable since they are not periodic, or have less than two periods. Hence, we can conclude that there is no trend or pattern in these fires and hence are not significant.
 ```
 
-**Summary and Conclusions**
+**Mann-Kendall Test**
 
-Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.
+Running the Mann-Kendall Test to assess whether a set of data values is increasing over time or decreasing over time, and whether the trend in either direction is statistically significant.
+
+```{r Mann-Kendall test, echo=FALSE, warning=FALSE, message=FALSE}
+
+
+mk_wildfire <- Kendall::MannKendall(wildfire_ts)
+summary(mk_wildfire)
+
+#The Mann-Kendall test produces a p-value of approximately 0.0025 (<0.05) shows that it is statistically significant and there is an increasing trend in the occurrences/area of wildfire burns over the years in California.
+
+mk_prescribed <- Kendall::MannKendall(prescribed_fire_ts)
+summary(mk_prescribed)
+
+mk_wildland <- Kendall::MannKendall(wildland_fire_ts)
+summary(mk_wildland)
+
+#The p-value of prescribed and wildland use fires are 0.93 and 0.68 respectively. Hence, we can see again that these fires are not stastically significant.
+```
