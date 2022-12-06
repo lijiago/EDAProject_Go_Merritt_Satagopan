@@ -47,8 +47,9 @@ Repository includes 3 main folders, (1) Data (2) Code (3) Output
 Includes subfolders for Raw and Processed data that contain .csv files
 
 (2) Code
-Includes .rmd files that detail code used to wrangle data/conduct analyses
+Includes .rmd files that detail code used to wrangle data/conduct analyses for each of the tests run.
 Files are named in the following manner: 'AnalysisConducted_TeamMember.Rmd' 
+Also includes a Final_Project.Rmd which is code that combines all the data
 
 (3) Output (should we have separate folders for plots for each of the tests so its neater?)
 Includes .jpg files created based on each analysis. File names are self explanatory. 
@@ -111,6 +112,8 @@ LATITUDE
 LONGITUDE
 
 ## Scripts and code
+
+
 
 <list any software scripts/code contained in the repository and a description of their purpose.>
 
