@@ -15,9 +15,25 @@ output:
 \newpage
 \listoftables 
 
+**Table 1**:
+**Table 2**:
+**Table 3**:
+
+
 \newpage
 \listoffigures 
 
+**Figure 1**:
+**Figure 2**:
+**Figure 3**:
+**Figure 4**:
+**Figure 5**:
+**Figure 6**:
+**Figure 7**:
+**Figure 8**:
+**Figure 9**:
+**Figure 10**:
+**Figure 11**:
 
 \newpage
 
@@ -96,7 +112,8 @@ We first filtered the dataset to only include wildfires in California for years 
 
 We also created a map to show the locations of each of the fires for both the years within the state. The purple icons represent fires that burned in 1988 while the yellow icons represent fires that burned in 2000.
 
-```{r, echo=FALSE}
+**Figure 1**:  
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 #filtering dataset for wildfires in California in years 1988 and 2000
 California.Wildfires <- Fire_data %>%
@@ -110,17 +127,23 @@ ggplot(California.Wildfires, aes(x = ACRES, color =as.factor(YEAR))) +
   labs(x='Acreage of fires', y='Count', color='Year', 
        title="Histogram of wildfires in 1988 & 2000, California")  
 
+
+```
+
+**Figure 2**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #exploratory spatial plots 
 California.Wildfires.sf <- California.Wildfires %>% 
   st_as_sf(coords=c('LONGITUDE', 'LATITUDE'), crs=4269)
 
 mapview(California.Wildfires.sf, zcol="YEAR")
-
 ```
 
 
 **Question 2 Exploratory Analysis:** 
-```{r, echo=FALSE}
+
+**Figure 3**:  
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 # We want to only include wildfires, so we need to wrangle the data using the filter() function. 
 
@@ -141,8 +164,11 @@ Wildfires_state_plot <- ggplot(Wildfire_data) +
   ylab("Number of Large Wildfires Between 1984-2018") +
   labs(title = "Number of Large Wildfires in U.S. Each State Between 1984 and 2018" )
 print(Wildfires_state_plot)
+```
 
 
+**Figure 4**:  
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states using the pipe function %>%. 
 
 States_Wildfire_data <- Wildfire_data %>%
@@ -165,11 +191,23 @@ print(mean_firesize_plot)
 
 ```
 
+
 **Question 3 Exploratory Analysis:** 
-```{r, echo=FALSE}
+
+**Figure 5**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 ```
 
+**Figure 6**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+```
+
+**Figure 7**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+```
 
 
 \newpage
@@ -185,7 +223,8 @@ H1 (alternative hypothesis): Means between both years are not equal
 
 From the two-sample test, we obtained a p-value of 0.3754, which was more than 0.05. This meant that we would accept the null hypothesis that the means were statistically equal for both years. 
 
-```{r, echo=FALSE}
+**Table 1**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #running two sample t test and printing the result of the test 
 Twosamp.ttest <- t.test(California.Wildfires$ACRES ~ California.Wildfires$YEAR)
 Twosamp.ttest
@@ -194,7 +233,12 @@ Twosamp.ttest
 
 
 ## Question 2: Is there a difference between large wildfire sizes in the 3 states with the most large wildfire occurrences? (California, Idaho, and Nevada) 
-```{r, echo=FALSE}
+
+**Table 2**: 
+
+
+**Figure 8**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Run the first ANOVA using the aov() function
 
 FireSize_ANOVA <- aov(data = States_Wildfire_data, ACRES ~ STATE)
@@ -230,10 +274,29 @@ print(FireSize_plot)
 
 
 ## Question 3:  Is there a trend in large fire occurrences in California from 1984 to 2007? What is the trend in wildfire, prescribed fires and wildland fire use over the same years? 
-```{r, echo=FALSE}
+
+
+**Figure 9**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 ```
 
+**Figure 10**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+```
+
+
+**Figure 11**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+```
+
+
+**Table 3**: 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+```
 
 
 \newpage
