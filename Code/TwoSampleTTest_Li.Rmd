@@ -21,22 +21,39 @@ Do the mean sizes of large wildfires in California differ between 1988 and 2000?
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(sf)
+library(mapview)
 
-USFireData <- read.csv("./Data/Processed/US_FireData_Processed.csv", 
-                stringsAsFactors = TRUE) 
+
+Fire_data <- read.csv("./Data/Processed/US_FireData_Processed.csv") 
 
 #filtering dataset for wildfires in California in years 1988 and 2000
-California.Wildfires <- USFireData %>%
+California.Wildfires <- Fire_data %>%
   filter(STATE %in% "CA") %>%
   filter(FIRE_TYPE %in% "Wildfire") %>%
   filter(YEAR %in% c("1988", "2000"))
+```
 
-#data exploration 
-ggplot(California.Wildfires, aes(x = ACRES, color =as.factor(YEAR))) +
+## Exploratory Analysis 
+```{r, exploratory analysis}
+#data exploration
+
+California_hist_1988_2000 <- ggplot(California.Wildfires, aes(x = ACRES, color =as.factor(YEAR))) +
   geom_freqpoly() +
   labs(x='Acreage of fires', y='Count', color='Year', 
-       title="Histogram of wildfires in 1988 & 2000, California")  
-  
+       title="Histogram of wildfires in 1988 & 2000, California")
+print(California_hist_1988_2000)
+
+ggsave("./Output/California_hist_1988_2000.jpg",California_hist_1988_2000 , height = 7, width = 8, units = "in", dpi = 300)
+
+
+#exploratory spatial plots 
+California.Wildfires.sf <- California.Wildfires %>% 
+  st_as_sf(coords=c('LONGITUDE', 'LATITUDE'), crs=4269)
+
+mapview(California.Wildfires.sf, zcol="YEAR")
+
+
 
 ```
 ### Two-sample t-test
