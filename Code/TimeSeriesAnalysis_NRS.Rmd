@@ -4,6 +4,13 @@ author: "Nanditha Ram Satagopan"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
+**Exploratory Analysis**
+
+Insert exploratory visualizations of your dataset. This may include, but is not limited to, graphs illustrating the distributions of variables of interest and/or maps of the spatial context of your dataset. Format your R chunks so that graphs are displayed but code is not displayed. Accompany these graphs with text sections that describe the visualizations and provide context for further analyses.
+
+Each figure should be accompanied by a caption, and each figure should be referenced within the text.
+
+Scope: think about what information someone might want to know about the dataset before analyzing it statistically. How might you visualize this information?
 
 ```{r setup, include=FALSE}
 #Uploading necessary packages
@@ -29,21 +36,22 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r California Fires}
+
+#Reading in dataset
 all_fires <- read.csv("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Data/Processed/US_FireData_Processed.csv",
                            stringsAsFactors = TRUE)
-
 summary(all_fires)
 
+#Wrangling dataset for California fires only
 all_cal_fires <- all_fires %>%
   filter(STATE=="CA")
-
 summary(all_cal_fires)
 
 cal_fires <- all_cal_fires %>%
-  filter(FIRE_TYPE=="Wildfire" | FIRE_TYPE=="Prescribed Fire" | FIRE_TYPE=="Wildland Fire Use") %>%
-  mutate(Date = my(paste(STARTMONTH,"-",YEAR)))
-
+  filter(FIRE_TYPE=="Wildfire" | FIRE_TYPE=="Prescribed Fire" | FIRE_TYPE=="Wildland Fire Use")
 summary(cal_fires)
+
+#Categorizing fire data
 
 wildfires_ca <- cal_fires %>%
   filter(FIRE_TYPE=="Wildfire")
@@ -54,6 +62,29 @@ prescribed_fires_ca <- cal_fires %>%
 wildland_fires_ca <- cal_fires %>%
 filter(FIRE_TYPE=="Wildland Fire Use")
 
+#Obtaining mean fires for time series analyses
+
+wildfires_mean <- 
+  wildfires_ca %>%
+  group_by(YEAR, STARTMONTH) %>%
+  summarize(Mean_fires = mean(ACRES)) %>%
+  mutate(Date = my(paste(STARTMONTH,"-",YEAR)))
+view(wildfires_mean)
+
+prescribed_fires_mean <- 
+  prescribed_fires_ca %>%
+  group_by(YEAR, STARTMONTH) %>%
+  summarize(Mean_fires = mean(ACRES)) %>%
+  mutate(Date = my(paste(STARTMONTH,"-",YEAR)))
+view(prescribed_fires_mean)
+
+wildland_fires_mean <- 
+  wildland_fires_ca %>%
+  group_by(YEAR, STARTMONTH) %>%
+  summarize(Mean_fires = mean(ACRES)) %>%
+  mutate(Date = my(paste(STARTMONTH,"-",YEAR)))
+view(wildland_fires_mean)
+
 ```
 
 ## Including Plots
@@ -63,12 +94,12 @@ You can also embed plots, for example:
 ```{r time plot, echo=FALSE}
 #Wildfire Fires 1984-2007
 wildfire_plot <- 
-  ggplot(wildfires_ca, aes(x = Date, y = ACRES)) +
+  ggplot(wildfires_mean, aes(x = Date, y = Mean_fires)) +
   geom_line() +
   geom_smooth(method="loess",se=FALSE) +
   labs(title = paste("Wildfire Area"),
-       y="years",
-       x="Burnt Area in Acres")+
+       y="Burnt Area in Acres",
+       x="years")+
   theme(plot.title = element_text(size = 40))+
   theme(plot.title = element_text(hjust = 0.5))
 
@@ -78,12 +109,12 @@ ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAPro
 
 #Prescribed Fires 1984-2007
 prescribed_fire_plot <- 
-  ggplot(prescribed_fires_ca, aes(x = Date, y = ACRES)) +
+  ggplot(prescribed_fires_mean, aes(x = Date, y = Mean_fires)) +
   geom_line() +
   geom_smooth(method="loess",se=FALSE) +
   labs(title = paste("Prescribed Fire Area"),
-       y="years",
-       x="Burnt Area in Acres")+
+       y="Burnt Area in Acres",
+       x="years")+
   theme(plot.title = element_text(size = 40))+
   theme(plot.title = element_text(hjust = 0.5))
 
@@ -91,14 +122,14 @@ print(prescribed_fire_plot)
 
 ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/prescribed_fire_plot.jpg", prescribed_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
 
-#Large data gaps, so no time series analysis
+#Wildland Fires 1984-2007
 wildland_fire_plot <-
-  ggplot(wildland_fires_ca, aes(x = Date, y = ACRES)) +
+  ggplot(wildland_fires_mean, aes(x = Date, y = Mean_fires)) +
   geom_line() +
   geom_smooth(method="loess",se=FALSE) +
   labs(title = paste("Burnt Wildland Use Fire Area"),
-       y="years",
-       x="Burnt Area in Acres")+
+       y="Burnt Area in Acres",
+       x="years")+
   theme(plot.title = element_text(size = 40))+
   theme(plot.title = element_text(hjust = 0.5))
 
@@ -106,6 +137,7 @@ print(wildland_fire_plot)
 
 ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/wildland_fire_plot.jpg", wildland_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
 
+#Large data gaps, so no time series analysis
 ```
 ```{r}
 #Plotted together
@@ -114,9 +146,47 @@ ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAPro
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+**Analysis**
+
+Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., “Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p < 0.0001)”). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.
+
+Each figure should be accompanied by a caption, and each figure should be referenced within the text.
+
 ```{r time series}
 
-Wildfire_ts <- ts(wildfires_ca$ACRES, start = c(1985,1), frequency = 365)
-plot(Wildfire_ts)
+#Wildfire Time Series
+
+wildfire_ts <- ts(wildfires_mean$Mean_fires, start = c(1984,1), frequency = 12)
+plot(wildfire_ts)
+wildfire_decomp <- stl(Wildfire_ts,s.window = "periodic")
+plot(wildfire_decomp)
+
+#Prescribed Fire Time Series
+prescribed_fire_ts <- ts(prescribed_fires_mean$Mean_fires, start = c(1984,1), frequency = 12)
+plot(prescribed_fire_ts)
+prescribed_decomp <- stl(prescribed_fire_ts,s.window = "periodic")
+plot(prescribed_decomp)
+
+#Wildland Fire Time Series
+wildland_fire_ts <- ts(wildland_fires_mean$Mean_fires, start = c(1984,1), frequency = 12)
+plot(wildland_fire_ts)
+wildland_decomp <- stl(wildland_fire_ts,s.window = "periodic")
+plot(wildland_decomp)
+
+##Error in stl(wildland_fire_ts, s.window = "periodic") : series is not periodic or has less than two periods
+```
+```{r}
+#Seasonal Mann-Kendall Test to assess whether a set of data values is increasing over time or decreasing over time, and whether the trend in either direction is statistically significant.
+
+smk_wildfire <- Kendall::SeasonalMannKendall(wildfire_ts)
+summary(smk_wildfire)
+
+smk_prescribed <- Kendall::SeasonalMannKendall(prescribed_fire_ts)
+summary(smk_prescribed)
 
 ```
+
+**Summary and Conclusions**
+
+Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.
