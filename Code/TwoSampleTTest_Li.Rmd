@@ -44,14 +44,15 @@ California_hist_1988_2000 <- ggplot(California.Wildfires, aes(x = ACRES, color =
        title="Histogram of wildfires in 1988 & 2000, California")
 print(California_hist_1988_2000)
 
-ggsave("./Output/California_hist_1988_2000.jpg",California_hist_1988_2000 , height = 7, width = 8, units = "in", dpi = 300)
-
+ggsave("./Output/Fig1_Li.jpg",California_hist_1988_2000 , height = 7, width = 8, units = "in", dpi = 300)
 
 #exploratory spatial plots 
 California.Wildfires.sf <- California.Wildfires %>% 
   st_as_sf(coords=c('LONGITUDE', 'LATITUDE'), crs=4269)
 
-mapview(California.Wildfires.sf, zcol="YEAR")
+Cali.Wildfire.Plot = mapview(California.Wildfires.sf, zcol="YEAR")
+Cali.Wildfire.Plot
+
 
 
 

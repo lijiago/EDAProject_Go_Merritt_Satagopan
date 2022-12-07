@@ -29,7 +29,7 @@ US Wildfires; National Geospatial Data Asset; landsat; fire location; fire occur
 
 Raw data owned by Department of Agriculture, U.S. Forest Service, retrieved from: https://catalog.data.gov/dataset/monitoring-trends-in-burn-severity-burned-area-boundaries-feature-layer-27201 
 
-File was saved as 'US_FireData_Raw.csv'
+Raw data file was saved as 'US_FireData_Raw.csv', in the Data/Raw folder. 
 
 Data accessed on 2022-11-25.
 
@@ -41,18 +41,19 @@ Data accessed on 2022-11-25.
 
 <describe your file naming conventions>
 
-Repository includes 3 main folders, (1) Data (2) Code (3) Output
+Repository contains 3 main folders, (1) Data (2) Code (3) Output
 
 (1) Data
 Includes subfolders for Raw and Processed data that contain .csv files
 
 (2) Code
-Includes .rmd files that detail code used to wrangle data/conduct analyses for each of the tests run.
-Files are named in the following manner: 'AnalysisConducted_TeamMember.Rmd' 
-Also includes a Final_Project.Rmd which is code that combines all the data
+Includes .rmd files that detail code used to wrangle data/conduct analysis for each of the tests.
+Files are named in the following manner: 'AnalysisConducted_TeamMemberName.Rmd'
+Also includes a Final_Project.Rmd which is the overall file combining code for all the 3 analyses run. 
 
-(3) Output (should we have separate folders for plots for each of the tests so its neater?)
-Includes .jpg files created based on each analysis. File names are self explanatory. 
+(3) Output 
+Includes .jpg files created based on each analysis. 
+Files are named in the following manner: 'FigNo_TeamMemberName.jpg', with the figure numbers corresponding to the final report.  
 
 
 ## Metadata
@@ -61,7 +62,7 @@ Includes .jpg files created based on each analysis. File names are self explanat
 
 Information gathered from: https://www.epa.gov/outdoor-air-quality-data/air-data-basic-information and https://aqs.epa.gov/aqsweb/documents/AQS_Format.html
 
-<Metadata for 'US_FireData_Raw.csv'> 
+**Metadata for 'US_FireData_Raw.csv'**
 Information gathered from: 
 https://www.mtbs.gov/direct-download
 
@@ -95,7 +96,7 @@ SHAPEAREA
 SHAPELEN
 
 
-<Metadata for 'US_FireData_Processed.csv'> 
+**Metadata for 'US_FireData_Processed.csv'**
 Information gathered from: 
 https://www.mtbs.gov/direct-download
 
@@ -112,19 +113,27 @@ LATITUDE
 LONGITUDE
 
 ## Scripts and code
-
-
-
 <list any software scripts/code contained in the repository and a description of their purpose.>
 
-## Quality assurance/quality control
+All codes found in "Code"" folder of main repository
 
+**ProcessedUSFireData_Li.Rmd**
+Initial code used to wrangle raw data to include only variables needed for our analysis. 
+
+**TwoSampleTTest_Li.Rmd**
+Code used to run Two Sample T-Test analysis
+
+**ANOVA_Mel.Rmd**
+Code used to run ANOVA analysis 
+
+**TimeSeriesAnalysis_NRS.Rmd**
+Code used to run time series analysis
+
+**Final_Project.Rmd**
+Code used to generate final report
+
+## Quality assurance/quality control
 <describe any relevant QA/QC procedures taken with your data. Some ideas can be found here:>
-<https://www.dataone.org/best-practices/develop-quality-assurance-and-quality-control-plan>
-<https://www.dataone.org/best-practices/ensure-basic-quality-control>
-<https://www.dataone.org/best-practices/communicate-data-quality>
-<https://www.dataone.org/best-practices/identify-outliers>
-<https://www.dataone.org/best-practices/identify-values-are-estimated>
 
 
 
