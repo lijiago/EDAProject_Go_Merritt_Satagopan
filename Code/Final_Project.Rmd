@@ -24,8 +24,8 @@ output:
 \newpage
 \listoffigures 
 
-**Figure 1**:
-**Figure 2**:
+**Figure 1**: Figure showing histogram of large wildfires in 1988 and 2000, California
+**Figure 2**: Map of location of large wildfires in California in 1988 and 2000
 **Figure 3**:
 **Figure 4**:
 **Figure 5**:
@@ -70,7 +70,7 @@ Fire_data <- read.csv("./Data/Processed/US_FireData_Processed.csv")
 
 # Rationale and Research Questions
 
-With climate change, recent observations show an increase in occurrences, severity and extent of wildfires across the United States.As disturbance regimes across the country change, we thought it was important to assess trends, differences, and changes in specific fire regimes. The analysis is aimed at trying to infer any potential differences and trends in the sizes and occurrences of large wildfires through the last few decades. Monitoring any trend in the large fires can help gain an understanding on the health of the landscape and perhaps predicting future incidents. The use of prescribed and wildland fires through the years also gives us an understanding of how they have gained popularity in landscape management over time.  
+With climate change, recent observations show an increase in occurrences, severity and extent of wildfires across the United States. As disturbance regimes across the country change, we thought it was important to assess trends, differences, and changes in specific fire regimes. The analysis is aimed at trying to infer any potential differences and trends in the sizes and occurrences of large wildfires through the last few decades. Monitoring any trend in the large fires can help gain an understanding on the health of the landscape and perhaps predicting future incidents. The use of prescribed and wildland fires through the years also gives us an understanding of how they have gained popularity in landscape management over time.  
 
 We decided to identify and focus our study on the three states with the most large fire occurrences (California, Idaho, and Nevada) because that would provide us with a larger dataset and better accuracy to derive conclusions.
 
@@ -116,9 +116,7 @@ Is there a trend in large fire occurrences in California from 1984 to 2007? What
 **Question 1 Exploratory Analysis:** 
 We first filtered the dataset to only include wildfires in California for years 1988 and 2000. We then created a histogram of wildfires in 1988 & 2000 to explore the data. However, from the plot, we could not tell if the mean was the same between both of the chosen years. As such, for the actual analysis, we decided to run a two-sample t-test to test whether the mean of acreage of fires between the two years was equivalent. 
 
-We also created a map to show the locations of each of the fires for both the years within the state. The purple icons represent fires that burned in 1988 while the yellow icons represent fires that burned in 2000.
-
-**Figure 1**:  
+**Figure 1**:  Figure showing histogram of large wildfires in 1988 and 2000, California
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 #filtering dataset for wildfires in California in years 1988 and 2000
@@ -136,7 +134,9 @@ ggplot(California.Wildfires, aes(x = ACRES, color =as.factor(YEAR))) +
 
 ```
 
-**Figure 2**: 
+We also created a map to show the locations of each of the fires for both the years within the state. The purple icons represent fires that burned in 1988 while the yellow icons represent fires that burned in 2000.
+
+**Figure 2**: Map of location of large wildfires in California in 1988 and 2000
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #exploratory spatial plots 
 California.Wildfires.sf <- California.Wildfires %>% 
@@ -203,9 +203,6 @@ print(mean_firesize_plot)
 **Figure 5**: 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
-#Reading in the raw dataset
-Fire_data <- read.csv("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Data/Processed/US_FireData_Processed.csv",
-                           stringsAsFactors = TRUE)
 summary(Fire_data)
 
 #Wrangling dataset for California fires only
@@ -319,7 +316,7 @@ To test whether the mean sizes of large wildfires in California differ between 1
 H0 (null hypothesis): Means between both years are equal
 H1 (alternative hypothesis): Means between both years are not equal
 
-From the two-sample test, we obtained a p-value of 0.3754, which was more than 0.05. This meant that we would accept the null hypothesis that the means were statistically equal for both years. 
+From the two-sample test, we obtained a p-value of 0.3754, which was more than 0.05. This meant that we accept the null hypothesis that the means were statistically equal for both years. 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #running two sample t test and printing the result of the test 
@@ -421,6 +418,8 @@ summary(mk_wildland)
 \newpage
 
 # Summary and Conclusions
+
+Q1: Based on the p-value, we concluded that the mean sizes of large wildfires in California did not differ between 1988 and 2000. This potentially shows that 'years' would not make a good predictor for the mean sizes of large wildfires in the state, although this could have been further investigated by comparing means between different pairs of years. 
 
 
 \newpage
