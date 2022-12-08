@@ -1,11 +1,12 @@
 ---
 title: "Analysis of Large Wildland Fires in California, Nevada, and Idaho"
-authors: "Li Jia Go, Melissa Merritt, and Nanditha Satagopan"
+authors: Li Jia Go, Melissa Merritt, and Nanditha Satagopan
 date: "2022-12-14"
-output: html_document
-editor_options: 
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
   chunk_output_type: console
-  
 Git Repository: https://github.com/lijiago/EDAProject_Go_Merritt_Satagopan
 ---
 output:
@@ -32,8 +33,6 @@ output:
 **Figure 7**:
 **Figure 8**:
 **Figure 9**:
-**Figure 10**:
-**Figure 11**:
 
 \newpage
 
@@ -204,15 +203,107 @@ print(mean_firesize_plot)
 **Figure 5**: 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
+#Reading in the raw dataset
+Fire_data <- read.csv("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Data/Processed/US_FireData_Processed.csv",
+                           stringsAsFactors = TRUE)
+summary(Fire_data)
+
+#Wrangling dataset for California fires only
+all_cal_fires <- Fire_data %>%
+  filter(STATE=="CA")
+summary(all_cal_fires)
+
+cal_fires <- all_cal_fires %>%
+  filter(FIRE_TYPE=="Wildfire" | FIRE_TYPE=="Prescribed Fire" | FIRE_TYPE=="Wildland Fire Use")
+summary(cal_fires)
+
+#Wrangling Wildfire dataset
+
+wildfires_ca <- cal_fires %>%
+  filter(FIRE_TYPE=="Wildfire")
+
+wildfires_mean <- 
+  wildfires_ca %>%
+  group_by(YEAR) %>%
+  summarize(Mean_fires = mean(ACRES))
+
+#Plotting Wildfire Fires 1984-2007
+
+wildfire_plot <- 
+  ggplot(wildfires_mean, aes(x = YEAR, y = Mean_fires)) +
+  geom_line() +
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = "Wildfire Area",
+       y="Burnt Area in Acres",
+       x="Years") +
+  theme(plot.title = element_text(size = 20))+
+  theme(plot.title = element_text(hjust = 0.5))
+
+print(wildfire_plot)
+
+#ggsave("./Output/wildfire_plot.jpg", wildfire_plot, height = 7, width = 8, units = "in", dpi = 300)
 ```
 
 **Figure 6**: 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
+#Wrangling Prescribed fire dataset
+
+prescribed_fires_ca <- cal_fires %>%
+  filter(FIRE_TYPE=="Prescribed Fire")
+
+prescribed_fires_mean <- 
+  prescribed_fires_ca %>%
+  group_by(YEAR) %>%
+  summarize(Mean_fires = mean(ACRES)) 
+
+#Plotting Prescribed Fires 1984-2007
+
+prescribed_fire_plot <- 
+  ggplot(prescribed_fires_mean, aes(x = YEAR, y = Mean_fires)) +
+  geom_line() +
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = "Prescribed Fire Area",
+       y="Burnt Area in Acres",
+       x="Years") +
+  theme(plot.title = element_text(size = 20))+
+  theme(plot.title = element_text(hjust = 0.5))
+
+print(prescribed_fire_plot)
+
+#ggsave("./Output/prescribed_fire_plot.jpg", prescribed_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
 ```
 
 **Figure 7**: 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+#Wrangling Wildland Use Fire Dataset
+
+wildland_fires_ca <- cal_fires %>%
+filter(FIRE_TYPE=="Wildland Fire Use")
+
+wildland_fires_mean <- 
+  wildland_fires_ca %>%
+  group_by(YEAR) %>%
+  summarize(Mean_fires = mean(ACRES))
+
+#Plotting Wildland Fires 1984-2007
+
+wildland_fire_plot <-
+  ggplot(wildland_fires_mean, aes(x = YEAR, y = Mean_fires)) +
+  geom_line() +
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = "Burnt Wildland Use Fire Area",
+       y="Burnt Area in Acres",
+       x="Years")+
+  theme(plot.title = element_text(size = 20))+
+  theme(plot.title = element_text(hjust = 0.5))
+
+print(wildland_fire_plot)
+
+#ggsave("./Output/wildland_fire_plot.jpg", wildland_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
+
+##We reject the the Prescribed and Wildland Fire data sets. Their time series cannot be plotted since there are huge gaps and great inconsistency in data and thus a significant trend or pattern cannot be deduced. 
 
 ```
 
@@ -282,20 +373,50 @@ print(FireSize_plot)
 **Figure 9**: 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
+#Wildfire Time Series
+#The time series analysis of the occurences of large wildfires helps us infer if they is any seasonality and/or trend in the variables over time (here, from years 1984-2007).
+
+wildfire_ts <- ts(wildfires_mean$Mean_fires, start = c(1984), frequency = 1)
+plot(wildfire_ts)
+
+#Plotting the Wildfire Time Series
+wildfire_TS_plot <- 
+  ggplot(wildfires_mean, aes(x = YEAR, y = Mean_fires)) +
+  geom_line() +
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = "Wildfire Time Series",
+       y="Burnt Area in Acres",
+       x="Years 1984-2007") +
+  theme(plot.title = element_text(size = 20))+
+  theme(plot.title = element_text(hjust = 0.5))
+
+print(wildfire_TS_plot)
+
+#ggsave("./Output/wildfire_timeseries.jpg", prescribed_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
+
 ```
 
-**Figure 10**: 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+**Mann-Kendall Test- Trend Analysis**
+
+Running the Mann-Kendall Test to assess whether a set of data values is increasing over time or decreasing over time, and whether the trend in either direction is statistically significant.
+
+```{r Mann-Kendall test, echo=FALSE, warning=FALSE, message=FALSE}
+
+
+mk_wildfire <- Kendall::MannKendall(wildfire_ts)
+summary(mk_wildfire)
+
+#The Mann-Kendall test produces a p-value of approximately 0.0025 (<0.05) shows that it is statistically significant and there is a monotonic trend in the occurrences/area of wildfire burns over the years in California. The obtained positive tau value implies that the trend is increasing.
+
+mk_prescribed <- Kendall::MannKendall(prescribed_fire_ts)
+summary(mk_prescribed)
+
+mk_wildland <- Kendall::MannKendall(wildland_fire_ts)
+summary(mk_wildland)
+
+#The p-value of prescribed and wildland use fires are 0.93 and 0.68 respectively. Hence, we can see again that these fires are not stastically significant.
 
 ```
-
-
-**Figure 11**: 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-
-```
-
-
 
 \newpage
 
