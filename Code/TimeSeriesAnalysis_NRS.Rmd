@@ -61,20 +61,17 @@ filter(FIRE_TYPE=="Wildland Fire Use")
 wildfires_mean <- 
   wildfires_ca %>%
   group_by(YEAR) %>%
-  summarize(Mean_fires = mean(ACRES)) # %>%
-  #mutate(Date = my(paste0(STARTMONTH, "-",YEAR))) 
+  summarize(Mean_fires = mean(ACRES))
 
 prescribed_fires_mean <- 
   prescribed_fires_ca %>%
-  group_by(YEAR, STARTMONTH) %>%
-  summarize(Mean_fires = mean(ACRES))%>%
-  mutate(Date = my(paste0(STARTMONTH, "-",YEAR))) 
+  group_by(YEAR) %>%
+  summarize(Mean_fires = mean(ACRES)) 
 
 wildland_fires_mean <- 
   wildland_fires_ca %>%
-  group_by(YEAR, STARTMONTH) %>%
-  summarize(Mean_fires = mean(ACRES))%>%
-  mutate(Date = my(paste0(STARTMONTH, "-",YEAR))) 
+  group_by(YEAR) %>%
+  summarize(Mean_fires = mean(ACRES))
 
 ```
 
@@ -85,7 +82,7 @@ wildland_fires_mean <-
 #Plotting Wildfire Fires 1984-2007
 
 wildfire_plot <- 
-  ggplot(wildfires_mean, aes(x = Date, y = Mean_fires)) +
+  ggplot(wildfires_mean, aes(x = YEAR, y = Mean_fires)) +
   geom_line() +
   geom_smooth(method="loess",se=FALSE) +
   labs(title = "Wildfire Area",
@@ -96,12 +93,12 @@ wildfire_plot <-
 
 print(wildfire_plot)
 
-ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/wildfire_plot.jpg", wildfire_plot, height = 7, width = 8, units = "in", dpi = 300)
+ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/Fig5_Nanditha.jpg", wildfire_plot, height = 7, width = 8, units = "in", dpi = 300)
 
 #Plotting Prescribed Fires 1984-2007
 
 prescribed_fire_plot <- 
-  ggplot(prescribed_fires_mean, aes(x = Date, y = Mean_fires)) +
+  ggplot(prescribed_fires_mean, aes(x = YEAR, y = Mean_fires)) +
   geom_line() +
   geom_smooth(method="loess",se=FALSE) +
   labs(title = "Prescribed Fire Area",
@@ -112,12 +109,12 @@ prescribed_fire_plot <-
 
 print(prescribed_fire_plot)
 
-ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/prescribed_fire_plot.jpg", prescribed_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
+ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/Fig6_Nanditha.jpg", prescribed_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
 
 #Plotting Wildland Fires 1984-2007
 
 wildland_fire_plot <-
-  ggplot(wildland_fires_mean, aes(x = Date, y = Mean_fires)) +
+  ggplot(wildland_fires_mean, aes(x = YEAR, y = Mean_fires)) +
   geom_line() +
   geom_smooth(method="loess",se=FALSE) +
   labs(title = "Burnt Wildland Use Fire Area",
@@ -128,7 +125,9 @@ wildland_fire_plot <-
 
 print(wildland_fire_plot)
 
-ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/wildland_fire_plot.jpg", wildland_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
+ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/Fig7_Nanditha.jpg", wildland_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
+
+##We reject the the Prescribed and Wildland Fire data sets. Their time series cannot be plotted since there are huge gaps and great inconsistency in data and thus a significant trend or pattern cannot be deduced. 
 
 ```
 
@@ -141,25 +140,23 @@ The time series analysis of the occurences of large wildfires helps us infer if 
 #Wildfire Time Series
 wildfire_ts <- ts(wildfires_mean$Mean_fires, start = c(1984), frequency = 1)
 plot(wildfire_ts)
-wildfire_decomp <- stl(wildfire_ts,s.window = "periodic")
-plot(wildfire_decomp)
 
-#Prescribed Fire Time Series
-prescribed_fire_ts <- ts(prescribed_fires_mean$Mean_fires, start = c(1984,1), frequency = 12)
-plot(prescribed_fire_ts)
-prescribed_decomp <- stl(prescribed_fire_ts,s.window = "periodic")
-plot(prescribed_decomp)
+wildfire_TS_plot <- 
+  ggplot(wildfires_mean, aes(x = YEAR, y = Mean_fires)) +
+  geom_line() +
+  geom_smooth(method="loess",se=FALSE) +
+  labs(title = "Wildfire Time Series",
+       y="Burnt Area in Acres",
+       x="Years 1984-2007") +
+  theme(plot.title = element_text(size = 20))+
+  theme(plot.title = element_text(hjust = 0.5))
 
-#Wildland Fire Time Series
-wildland_fire_ts <- ts(wildland_fires_mean$Mean_fires, start = c(1984,1), frequency = 12)
-plot(wildland_fire_ts)
-wildland_decomp <- stl(wildland_fire_ts,s.window = "periodic")
-plot(wildland_decomp)
+print(wildfire_TS_plot)
 
-##The Prescribed and Wildland Fire time series are not processable since they are not periodic, or have less than two periods. Hence, we can conclude that there is no trend or pattern in these fires and hence are not significant.
+ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/Fig9_Nanditha.jpg", wildfire_TS_plot, height = 7, width = 8, units = "in", dpi = 300)
 ```
 
-**Mann-Kendall Test**
+**Mann-Kendall Test- Trend Analysis**
 
 Running the Mann-Kendall Test to assess whether a set of data values is increasing over time or decreasing over time, and whether the trend in either direction is statistically significant.
 
@@ -169,7 +166,7 @@ Running the Mann-Kendall Test to assess whether a set of data values is increasi
 mk_wildfire <- Kendall::MannKendall(wildfire_ts)
 summary(mk_wildfire)
 
-#The Mann-Kendall test produces a p-value of approximately 0.0025 (<0.05) shows that it is statistically significant and there is an increasing trend in the occurrences/area of wildfire burns over the years in California.
+#The Mann-Kendall test produces a p-value of approximately 0.0025 (<0.05) shows that it is statistically significant and there is a monotonic trend in the occurrences/area of wildfire burns over the years in California. The obtained positive tau value implies that the trend is increasing.
 
 mk_prescribed <- Kendall::MannKendall(prescribed_fire_ts)
 summary(mk_prescribed)

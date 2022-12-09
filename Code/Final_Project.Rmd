@@ -28,11 +28,11 @@ output:
 **Figure 2**: Map of location of large wildfires in California in 1988 and 2000
 **Figure 3**:
 **Figure 4**:
-**Figure 5**:
-**Figure 6**:
-**Figure 7**:
+**Figure 5**: Burnt Wildfire Area from 1988-2007 in California
+**Figure 6**: Burnt Prescribed Fire Area from 1988-2007 in California
+**Figure 7**: Burnt Wildland Use Fire Area from 1988-2007 in California
 **Figure 8**:
-**Figure 9**:
+**Figure 9**: Time Series Analysis Plot of Wildfire Area from 1988-2007 in California
 
 \newpage
 
@@ -170,6 +170,7 @@ Wildfires_state_plot <- ggplot(Wildfire_data) +
   ylab("Number of Large Wildfires Between 1984-2018") +
   labs(title = "Number of Large Wildfires in U.S. Each State Between 1984 and 2018" )
 print(Wildfires_state_plot)
+
 ```
 
 
@@ -199,8 +200,9 @@ print(mean_firesize_plot)
 
 
 **Question 3 Exploratory Analysis:** 
+We first filtered the dataset to only include wildfires in California for the years 1988 to 2007. Subsequent pipe functions were used to obtain different datasets for the three fire categories- wildfire, prescribed and wildland use fire to check usability of data. Since the data collection was unevenly distributed over the months of each year, mean fire area was calculated for each fire for better comparison. The plots for the fires showed different trends but it was apparent from the wrangled datasets that time series analyses could not be performed for prescribed and wildland use fires since there were large gaps in data.
 
-**Figure 5**: 
+**Figure 5**: Burnt Wildfire Area from 1988-2007 in California
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 summary(Fire_data)
@@ -238,10 +240,9 @@ wildfire_plot <-
 
 print(wildfire_plot)
 
-#ggsave("./Output/wildfire_plot.jpg", wildfire_plot, height = 7, width = 8, units = "in", dpi = 300)
 ```
 
-**Figure 6**: 
+**Figure 6**: Burnt Prescribed Fire Area from 1988-2007 in California
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 #Wrangling Prescribed fire dataset
@@ -268,10 +269,9 @@ prescribed_fire_plot <-
 
 print(prescribed_fire_plot)
 
-#ggsave("./Output/prescribed_fire_plot.jpg", prescribed_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
 ```
 
-**Figure 7**: 
+**Figure 7**: Burnt Wildland Use Fire Area from 1988-2007 in California
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 #Wrangling Wildland Use Fire Dataset
@@ -297,8 +297,6 @@ wildland_fire_plot <-
   theme(plot.title = element_text(hjust = 0.5))
 
 print(wildland_fire_plot)
-
-#ggsave("./Output/wildland_fire_plot.jpg", wildland_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
 
 ##We reject the the Prescribed and Wildland Fire data sets. Their time series cannot be plotted since there are huge gaps and great inconsistency in data and thus a significant trend or pattern cannot be deduced. 
 
@@ -366,12 +364,13 @@ print(FireSize_plot)
 
 ## Question 3:  Is there a trend in large fire occurrences in California from 1984 to 2007? What is the trend in wildfire, prescribed fires and wildland fire use over the same years? 
 
+A time series analysis is done for wildfire by plotting mean burnt area vs. years to observe any potential trend over the years. Additionally, the Mann-Kendall test is performed to check for the nature of the possible trend.
 
-**Figure 9**: 
+**Figure 9**: Time Series Analysis Plot of Wildfire Area from 1988-2007 in California
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 #Wildfire Time Series
-#The time series analysis of the occurences of large wildfires helps us infer if they is any seasonality and/or trend in the variables over time (here, from years 1984-2007).
+#The time series analysis of the occurrences of large wildfires helps us infer if they is any seasonality and/or trend in the variables over time (here, from years 1984-2007).
 
 wildfire_ts <- ts(wildfires_mean$Mean_fires, start = c(1984), frequency = 1)
 plot(wildfire_ts)
@@ -388,8 +387,6 @@ wildfire_TS_plot <-
   theme(plot.title = element_text(hjust = 0.5))
 
 print(wildfire_TS_plot)
-
-#ggsave("./Output/wildfire_timeseries.jpg", prescribed_fire_plot, height = 7, width = 8, units = "in", dpi = 300)
 
 ```
 
@@ -419,7 +416,19 @@ summary(mk_wildland)
 
 # Summary and Conclusions
 
-Q1: Based on the p-value, we concluded that the mean sizes of large wildfires in California did not differ between 1988 and 2000. This potentially shows that 'years' would not make a good predictor for the mean sizes of large wildfires in the state, although this could have been further investigated by comparing means between different pairs of years. 
+Q1: 
+
+Based on the p-value, we concluded that the mean sizes of large wildfires in California did not differ between 1988 and 2000. This potentially shows that 'years' would not make a good predictor for the mean sizes of large wildfires in the state, although this could have been further investigated by comparing means between different pairs of years. 
+
+Q2:
+
+Q3: 
+
+The Mann-Kendall test and time series was performed on the three categories of fires in California from 1984-2007. The Mann-Kendall test produces a p-value of approximately 0.0025 (<0.05) shows that it is statistically significant and there is a monotonic trend in the occurrences/area of wildfire burns over the years in California. The obtained positive tau value implies that the trend is increasing.The time series analysis also indicated that there is an increasing trend in the wildfires over the years, shown in Fig. 9. 
+
+However, due to inconsistency and large gaps in the datasets of the prescribed and wildland use fires, time series analysis could not be performed on them. To further double-check this, the Mann-Kendall test was performed again and the p-values of prescribed and wildland use fires were 0.93 and 0.68 respectively. Hence, we accept the null hypothesis and can see again that these fires are not stastically significant.
+
+This paves way to further studies that can be done or gathered to understand this increase in wildfire severity and occurrences, which could be due to effects of climate change. 
 
 
 \newpage
