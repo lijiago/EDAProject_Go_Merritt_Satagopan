@@ -73,6 +73,8 @@ Wildfires_state_plot <- ggplot(Wildfire_data) +
   labs(title = "Number of Large Wildfires in U.S. Each State Between 1984 and 2018" )
 print(Wildfires_state_plot)
 
+ggsave("./Output/Fig3_Mel.jpg",Wildfires_state_plot , height = 7, width = 8, units = "in", dpi = 300)
+
 
 # Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states using the pipe function %>%. 
 
@@ -92,7 +94,9 @@ mean_firesize_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wi
   xlab("Year") +
   ylab("Mean Wildfire Size (Acres)") +
   labs(title = "Mean Wildfire Size for California, Idaho, and Nevada from 1984 through 2018")
-print(Exploratory_plot)
+print(mean_firesize_plot)
+
+ggsave("./Output/Fig4_Mel.jpg", mean_firesize_plot , height = 7, width = 8, units = "in", dpi = 300)
 ```
 
 
@@ -128,6 +132,8 @@ FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
   labs(x = "State", y = "Acres") +
   ylim(0, 20000) 
 print(FireSize_plot)
+
+ggsave("./Output/Fig8_Mel.jpg", FireSize_plot , height = 7, width = 8, units = "in", dpi = 300)
 
 ```
 

@@ -147,6 +147,7 @@ mapview(California.Wildfires.sf, zcol="YEAR")
 
 
 **Question 2 Exploratory Analysis:** 
+We first filtered the dataset to only include wildfires and not wildland use fires or prescribed burns. In order to answer the question that looked at the states with the most fire occurrences, we used figures to see which states had the most large wildfire occurrences (Figure 3). We were able to determine that California, Nevada, and Idaho were the states with the most large wildfires, so we then filtered the dataset to only include those states. After filtering the dataset we wanted to see the trends of the mean large wildfire sizes for each year from 1984 to 2018 in these three states to give an idea of how the mean fire sizes compare to eachother (Figure 4).
 
 **Figure 3**: Figure showing the number of large wildfires in each state with documented large wildfires from 1984-2000. 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -174,7 +175,7 @@ print(Wildfires_state_plot)
 ```
 
 
-**Figure 4**:  
+**Figure 4**: Figure showing the trends in mean wildfire occurrences from 1984 to 2018 in California, Idaho, and Nevada. 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states using the pipe function %>%. 
 
@@ -326,6 +327,7 @@ Twosamp.ttest
 ## Question 2: Is there a difference between large wildfire sizes in the 3 states with the most large wildfire occurrences? (California, Idaho, and Nevada) 
 
 
+
 **Figure 8**: 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Run the first ANOVA using the aov() function
@@ -422,7 +424,7 @@ Based on the p-value, we concluded that the mean sizes of large wildfires in Cal
 
 Q2:
 
-Based on the p-value that we obtained from the result of the 
+Based on the p-value that we obtained from the result of the ANOVA test, we concluded that there is a statistically significant difference in large wildland fire sizes for the states with the most large wildland fire occurrences, but not a very strong difference. In the Tukey test, our results show that the fire sizes for the three states were statistically the same. Although we did not get strong results, these test show us that there is room for more questions to try to find trends. For the slight difference we did find, it would be interesting to see why the states did have different fire sizes and if it could be due to different land connectivity, land types, or management practices. 
 
 Q3: 
 
