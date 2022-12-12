@@ -26,12 +26,12 @@ output:
 
 **Figure 1**: Figure showing histogram of large wildfires in 1988 and 2000, California
 **Figure 2**: Map of location of large wildfires in California in 1988 and 2000
-**Figure 3**:
-**Figure 4**:
+**Figure 3**: Large Wildfires in U.S. States Between 1984 and 2018
+**Figure 4**: Mean Wildfire Size for California, Idaho, and Nevada from 1984 through 2018
 **Figure 5**: Burnt Wildfire Area from 1988-2007 in California
 **Figure 6**: Burnt Prescribed Fire Area from 1988-2007 in California
 **Figure 7**: Burnt Wildland Use Fire Area from 1988-2007 in California
-**Figure 8**:
+**Figure 8**: Pairwise Relationships between Mean Fire Sizes in California, Idaho, and Nevada
 **Figure 9**: Time Series Analysis Plot of Wildfire Area from 1988-2007 in California
 
 \newpage
@@ -148,7 +148,7 @@ mapview(California.Wildfires.sf, zcol="YEAR")
 
 **Question 2 Exploratory Analysis:** 
 
-**Figure 3**:  
+**Figure 3**: Figure showing the number of large wildfires in each state with documented large wildfires from 1984-2000. 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 # We want to only include wildfires, so we need to wrangle the data using the filter() function. 
@@ -168,7 +168,7 @@ Wildfires_state_plot <- ggplot(Wildfire_data) +
   theme(axis.text.x=element_text(angle = 60, hjust = 1)) +
   xlab("State") +
   ylab("Number of Large Wildfires Between 1984-2018") +
-  labs(title = "Number of Large Wildfires in U.S. Each State Between 1984 and 2018" )
+  labs(title = "Number of Large Wildfires in U.S. States Between 1984 and 2018" )
 print(Wildfires_state_plot)
 
 ```
@@ -355,7 +355,7 @@ FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   stat_summary(geom = "text", fun = max, vjust = -1, size = 3.5,
                label = c("b", "ab", "a")) +
-  labs(x = "State", y = "Acres", title = "Pairwise Relationships between State's Fire Sizes") +
+  labs(x = "State", y = "Acres", title = "Pairwise Relationships between Mean Fire Sizes in California, Idaho, and Nevada") +
   ylim(0, 20000) 
 print(FireSize_plot)
 
@@ -421,6 +421,8 @@ Q1:
 Based on the p-value, we concluded that the mean sizes of large wildfires in California did not differ between 1988 and 2000. This potentially shows that 'years' would not make a good predictor for the mean sizes of large wildfires in the state, although this could have been further investigated by comparing means between different pairs of years. 
 
 Q2:
+
+Based on the p-value that we obtained from the result of the 
 
 Q3: 
 
