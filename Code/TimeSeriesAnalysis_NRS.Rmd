@@ -154,6 +154,12 @@ wildfire_TS_plot <-
 print(wildfire_TS_plot)
 
 ggsave("C:/Users/Admin/Desktop/Courses/Sem 1/Environmental Data Analytics/EDAProject_Go_Merritt_Satagopan/Output/Fig9_Nanditha.jpg", wildfire_TS_plot, height = 7, width = 8, units = "in", dpi = 300)
+
+#Prescribed Fire Time Series
+prescribed_fire_ts <- ts(prescribed_fires_mean$Mean_fires, start = c(1984), frequency = 1)
+
+#Wildland Fire Time Series
+wildland_fire_ts <- ts(wildland_fires_mean$Mean_fires, start = c(1984), frequency = 1)
 ```
 
 **Mann-Kendall Test- Trend Analysis**
@@ -174,5 +180,5 @@ summary(mk_prescribed)
 mk_wildland <- Kendall::MannKendall(wildland_fire_ts)
 summary(mk_wildland)
 
-#The p-value of prescribed and wildland use fires are 0.93 and 0.68 respectively. Hence, we can see again that these fires are not stastically significant.
+#The p-value of prescribed and wildland use fires are 0.6374 and 0.5296 respectively. Hence, we can see again that these fires are not statistically significant.
 ```
