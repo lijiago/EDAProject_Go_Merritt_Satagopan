@@ -3,8 +3,8 @@ title: "Analysis of Large Wildland Fires in California, Nevada, and Idaho"
 authors: Li Jia Go, Melissa Merritt, and Nanditha Satagopan
 date: "2022-12-14"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 editor_options:
   chunk_output_type: console
 Git Repository: https://github.com/lijiago/EDAProject_Go_Merritt_Satagopan
@@ -116,16 +116,19 @@ Is there a trend in large fire occurrences in California from 1984 to 2007? What
 **Question 1 Exploratory Analysis:** 
 We first filtered the dataset to only include wildfires in California for years 1988 and 2000. We then created a histogram of wildfires in 1988 & 2000 to explore the data. However, from the plot, we could not tell if the mean was the same between both of the chosen years. As such, for the actual analysis, we decided to run a two-sample t-test to test whether the mean of acreage of fires between the two years was equivalent. 
 
-**Figure 1**:  Figure showing histogram of large wildfires in 1988 and 2000, California
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #filtering dataset for wildfires in California in years 1988 and 2000
 California.Wildfires <- Fire_data %>%
   filter(STATE %in% "CA") %>%
   filter(FIRE_TYPE %in% "Wildfire") %>%
   filter(YEAR %in% c("1988", "2000"))
 
-#data exploration 
+#data exploration
+```
+
+**Figure 1**:  Figure showing histogram of large wildfires in 1988 and 2000, California
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(California.Wildfires, aes(x = ACRES, color =as.factor(YEAR))) +
   geom_freqpoly() +
   labs(x='Acreage of fires', y='Count', color='Year', 
@@ -136,12 +139,15 @@ ggplot(California.Wildfires, aes(x = ACRES, color =as.factor(YEAR))) +
 
 We also created a map to show the locations of each of the fires for both the years within the state. The purple icons represent fires that burned in 1988 while the yellow icons represent fires that burned in 2000.
 
-**Figure 2**: Map of location of large wildfires in California in 1988 and 2000
+
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #exploratory spatial plots 
 California.Wildfires.sf <- California.Wildfires %>% 
   st_as_sf(coords=c('LONGITUDE', 'LATITUDE'), crs=4269)
+```
 
+**Figure 2**: Map of location of large wildfires in California in 1988 and 2000
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 mapview(California.Wildfires.sf, zcol="YEAR")
 ```
 
@@ -149,9 +155,8 @@ mapview(California.Wildfires.sf, zcol="YEAR")
 **Question 2 Exploratory Analysis:** 
 We first filtered the dataset to only include wildfires and not wildland use fires or prescribed burns. In order to answer the question that looked at the states with the most fire occurrences, we used figures to see which states had the most large wildfire occurrences (Figure 3). We were able to determine that California, Nevada, and Idaho were the states with the most large wildfires, so we then filtered the dataset to only include those states. After filtering the dataset we wanted to see the trends of the mean large wildfire sizes for each year from 1984 to 2018 in these three states to give an idea of how the mean fire sizes compare to eachother (Figure 4).
 
-**Figure 3**: Figure showing the number of large wildfires in each state with documented large wildfires from 1984-2000. 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # We want to only include wildfires, so we need to wrangle the data using the filter() function. 
 
 Wildfire_data <- Fire_data %>%
@@ -162,8 +167,11 @@ Wildfire_data <- Fire_data %>%
 Count_per_state <- Wildfire_data %>%
   count(STATE)
 
-# To view the amount of large wildfires for each space we can use ggplot() and within ggplot, the geom_bar() function. We can adjust the text angle with theme(). xlab, ylab, and labs allow us to name the plot and the axes. 
+# To view the amount of large wildfires for each space we can use ggplot() and within ggplot, the geom_bar() function.
+```
 
+**Figure 3**: Figure showing the number of large wildfires in each state with documented large wildfires from 1984-2000. 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 Wildfires_state_plot <- ggplot(Wildfire_data) + 
   geom_bar(aes(x=STATE)) +
   theme(axis.text.x=element_text(angle = 60, hjust = 1)) +
@@ -173,9 +181,7 @@ Wildfires_state_plot <- ggplot(Wildfire_data) +
 print(Wildfires_state_plot)
 
 ```
-
-
-**Figure 4**: Figure showing the trends in mean wildfire occurrences from 1984 to 2018 in California, Idaho, and Nevada. 
+ 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Now knowing that California, Idaho, and Nevada have the most wildfire occurrences, we can filter the data to only include July and August fires for those three states using the pipe function %>%. 
 
@@ -188,8 +194,11 @@ Mean_wildfire_size_state <- States_Wildfire_data %>%
   group_by(STATE, YEAR) %>%
   summarise(Mean_wildfire_size = mean(ACRES)) 
 
-# Using the mean wildfire dataset, we can plot the mean fire sizes data for each year. This will give us the line graph of each states mean wildfire sizes and how they have changed over the years. 
+# Using the mean wildfire dataset, we can plot the mean fire sizes data for each year. This will give us the line graph of each states mean wildfire sizes and how they have changed over the years.
+```
 
+**Figure 4**: Figure showing the trends in mean wildfire occurrences from 1984 to 2018 in California, Idaho, and Nevada.
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 mean_firesize_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wildfire_size, color = STATE)) +
   geom_line() + 
   xlab("Year") +
@@ -203,9 +212,8 @@ print(mean_firesize_plot)
 **Question 3 Exploratory Analysis:** 
 We first filtered the dataset to only include wildfires in California for the years 1988 to 2007. Subsequent pipe functions were used to obtain different datasets for the three fire categories- wildfire, prescribed and wildland use fire to check usability of data. Since the data collection was unevenly distributed over the months of each year, mean fire area was calculated for each fire for better comparison. The plots for the fires showed different trends but it was apparent from the wrangled datasets that time series analyses could not be performed for prescribed and wildland use fires since there were large gaps in data.
 
-**Figure 5**: Burnt Wildfire Area from 1988-2007 in California
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 summary(Fire_data)
 
 #Wrangling dataset for California fires only
@@ -228,7 +236,10 @@ wildfires_mean <-
   summarize(Mean_fires = mean(ACRES))
 
 #Plotting Wildfire Fires 1984-2007
+```
 
+**Figure 5**: Burnt Wildfire Area from 1988-2007 in California
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 wildfire_plot <- 
   ggplot(wildfires_mean, aes(x = YEAR, y = Mean_fires)) +
   geom_line() +
@@ -243,9 +254,7 @@ print(wildfire_plot)
 
 ```
 
-**Figure 6**: Burnt Prescribed Fire Area from 1988-2007 in California
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
-
 #Wrangling Prescribed fire dataset
 
 prescribed_fires_ca <- cal_fires %>%
@@ -257,7 +266,10 @@ prescribed_fires_mean <-
   summarize(Mean_fires = mean(ACRES)) 
 
 #Plotting Prescribed Fires 1984-2007
+```
 
+**Figure 6**: Burnt Prescribed Fire Area from 1988-2007 in California
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 prescribed_fire_plot <- 
   ggplot(prescribed_fires_mean, aes(x = YEAR, y = Mean_fires)) +
   geom_line() +
@@ -272,9 +284,7 @@ print(prescribed_fire_plot)
 
 ```
 
-**Figure 7**: Burnt Wildland Use Fire Area from 1988-2007 in California
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
-
 #Wrangling Wildland Use Fire Dataset
 
 wildland_fires_ca <- cal_fires %>%
@@ -286,7 +296,9 @@ wildland_fires_mean <-
   summarize(Mean_fires = mean(ACRES))
 
 #Plotting Wildland Fires 1984-2007
-
+```
+**Figure 7**: Burnt Wildland Use Fire Area from 1988-2007 in California
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 wildland_fire_plot <-
   ggplot(wildland_fires_mean, aes(x = YEAR, y = Mean_fires)) +
   geom_line() +
@@ -333,8 +345,6 @@ H1 (alternative hypothesis): There is a difference between large wildfire sizes 
 
 We first ran  an ANOVA, and the result of our ANOVA was a p-value of 0.00274, which would lead us to reject the null hypothesis. The next test we ran was the linear model, which gave us the results that California and Nevada are statistically different (p-value = 0.000617), but Idaho is not. This is also confirmed in the Tukey test which you can see the results of in Figure 8. 
 
-
-**Figure 8**: 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Run the first ANOVA using the aov() function
 
@@ -357,7 +367,9 @@ FireSize_groups <- HSD.test(FireSize_ANOVA, "STATE", group = TRUE)
 FireSize_groups
 
 # Plot the groupings using ggplot() 
-
+```
+**Figure 8**: Pairwise relationships between California, Idaho, and Nevada wildfire sizes. Groupings found using the Tukey's HSD test.
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -366,7 +378,6 @@ FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
   labs(x = "State", y = "Fire Size (Acres)", title = "Pairwise Relationships between Mean Fire Sizes in California, Idaho, and Nevada") +
   ylim(0, 20000) 
 print(FireSize_plot)
-
 ```
 
 
@@ -374,9 +385,7 @@ print(FireSize_plot)
 
 A time series analysis is done for wildfire by plotting mean burnt area vs. years to observe any potential trend over the years. Additionally, the Mann-Kendall test is performed to check for the nature of the possible trend.
 
-**Figure 9**: Time Series Analysis Plot of Wildfire Area from 1988-2007 in California
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
-
 #Wildfire Time Series
 #The time series analysis of the occurrences of large wildfires helps us infer if they is any seasonality and/or trend in the variables over time (here, from years 1984-2007).
 
@@ -384,6 +393,9 @@ wildfire_ts <- ts(wildfires_mean$Mean_fires, start = c(1984), frequency = 1)
 plot(wildfire_ts)
 
 #Plotting the Wildfire Time Series
+```
+**Figure 9**: Time Series Analysis Plot of Wildfire Area from 1988-2007 in California
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 wildfire_TS_plot <- 
   ggplot(wildfires_mean, aes(x = YEAR, y = Mean_fires)) +
   geom_line() +
@@ -395,7 +407,6 @@ wildfire_TS_plot <-
   theme(plot.title = element_text(hjust = 0.5))
 
 print(wildfire_TS_plot)
-
 ```
 
 **Mann-Kendall Test- Trend Analysis**
@@ -403,8 +414,6 @@ print(wildfire_TS_plot)
 Running the Mann-Kendall Test to assess whether a set of data values is increasing over time or decreasing over time, and whether the trend in either direction is statistically significant.
 
 ```{r Mann-Kendall test, echo=FALSE, warning=FALSE, message=FALSE}
-
-
 mk_wildfire <- Kendall::MannKendall(wildfire_ts)
 summary(mk_wildfire)
 
