@@ -153,7 +153,7 @@ mapview(California.Wildfires.sf, zcol="YEAR")
 
 
 **Question 2 Exploratory Analysis:** 
-We first filtered the dataset to only include wildfires and not wildland use fires or prescribed burns. In order to answer the question that looked at the states with the most fire occurrences, we used figures to see which states had the most large wildfire occurrences (Figure 3). We were able to determine that California, Nevada, and Idaho were the states with the most large wildfires, so we then filtered the dataset to only include those states. After filtering the dataset we wanted to see the trends of the mean large wildfire sizes for each year from 1984 to 2018 in these three states to give an idea of how the mean fire sizes compare to eachother (Figure 4).
+We first filtered the dataset to only include wildfires and not wildland use fires or prescribed burns. In order to answer the question that looked at the states with the most fire occurrences, we used figures to see which states had the most large wildfire occurrences (Figure 3). We were able to determine that California, Nevada, and Idaho were the states with the most large wildfires, so we then filtered the dataset to only include those states. After filtering the dataset we wanted to see the trends of the mean large wildfire sizes for each year from 1984 to 2018 in these three states to give an idea of how the mean fire sizes compare to each other (Figure 4).
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -343,7 +343,7 @@ To test if there are differences in the large wildfire sizes in these three stat
 H0 (null hypothesis): There is no difference between large wildfire sizes in the 3 states with the most large wildfire occurrences (California, Idaho, and Nevada). 
 H1 (alternative hypothesis): There is a difference between large wildfire sizes in the 3 states with the most large wildfire occurrences (California, Idaho, and Nevada).
 
-We first ran  an ANOVA, and the result of our ANOVA was a p-value of 0.00274, which would lead us to reject the null hypothesis. The next test we ran was the linear model, which gave us the results that California and Nevada are statistically different (p-value = 0.000617), but Idaho is not. This is also confirmed in the Tukey test which you can see the results of in Figure 8. 
+We first ran an ANOVA, and the result of our ANOVA was a p-value of 0.00274, which would lead us to reject the null hypothesis. The next test we ran was the linear model, which gave us the results that California and Nevada are statistically different (p-value = 0.000617), but Idaho is not. This is also confirmed in the Tukey HSD test, which you can see the results of in Figure 8. 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # Run the first ANOVA using the aov() function
