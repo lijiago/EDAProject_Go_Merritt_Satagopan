@@ -129,7 +129,7 @@ FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   stat_summary(geom = "text", fun = max, vjust = -1, size = 3.5,
                label = c("b", "ab", "a")) +
-  labs(x = "State", y = "Acres") +
+  labs(x = "State", y = "Fire Size (Acres)", title = "Pairwise Relationships between Mean Fire Sizes in California, Idaho, and Nevada") +
   ylim(0, 20000) 
 print(FireSize_plot)
 

@@ -312,6 +312,7 @@ print(wildland_fire_plot)
 
 ## Question 1: Do the mean sizes of large wildfires in California differ between 1988 and 2000?
 To test whether the mean sizes of large wildfires in California differ between 1988 and 2000, we ran a t-sample t test to test the hypothesis. 
+
 H0 (null hypothesis): Means between both years are equal
 H1 (alternative hypothesis): Means between both years are not equal
 
@@ -325,7 +326,12 @@ Twosamp.ttest
 ```
 
 ## Question 2: Is there a difference between large wildfire sizes in the 3 states with the most large wildfire occurrences? (California, Idaho, and Nevada) 
+To test if there are differences in the large wildfire sizes in these three states, we ran an analysis of variance using an ANOVA test. 
 
+H0 (null hypothesis): There is no difference between large wildfire sizes in the 3 states with the most large wildfire occurrences (California, Idaho, and Nevada). 
+H1 (alternative hypothesis): There is a difference between large wildfire sizes in the 3 states with the most large wildfire occurrences (California, Idaho, and Nevada).
+
+We first ran  an ANOVA, and the result of our ANOVA was a p-value of 0.00274, which would lead us to reject the null hypothesis. The next test we ran was the linear model, which gave us the results that California and Nevada are statistically different (p-value = 0.000617), but Idaho is not. This is also confirmed in the Tukey test which you can see the results of in Figure 8. 
 
 
 **Figure 8**: 
@@ -357,7 +363,7 @@ FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   stat_summary(geom = "text", fun = max, vjust = -1, size = 3.5,
                label = c("b", "ab", "a")) +
-  labs(x = "State", y = "Acres", title = "Pairwise Relationships between Mean Fire Sizes in California, Idaho, and Nevada") +
+  labs(x = "State", y = "Fire Size (Acres)", title = "Pairwise Relationships between Mean Fire Sizes in California, Idaho, and Nevada") +
   ylim(0, 20000) 
 print(FireSize_plot)
 
@@ -424,15 +430,16 @@ Based on the p-value, we concluded that the mean sizes of large wildfires in Cal
 
 Q2:
 
-Based on the p-value that we obtained from the result of the ANOVA test, we concluded that there is a statistically significant difference in large wildland fire sizes for the states with the most large wildland fire occurrences, but not a very strong difference. In the Tukey test, our results show that the fire sizes for the three states were statistically the same. Although we did not get strong results, these test show us that there is room for more questions to try to find trends. For the slight difference we did find, it would be interesting to see why the states did have different fire sizes and if it could be due to different land connectivity, land types, or management practices. 
+Based on the p-value we obtained from the result of the ANOVA test, we concluded that there is a statistically significant difference in large wildland fire sizes for the states with the most large wildland fire occurrences. When running the linear model, we found that fire sizes in California and Nevada were statistically different, but Idaho was statistically the same to both Nevada and California. This was confirmed in our Tukey test (Figure 8). It would be interesting to see why Nevada and California did have different fire sizes and if it could be due to different land connectivity, land types, or management practices. These questions allow for further research and analysis. 
 
 Q3: 
 
-The Mann-Kendall test and time series was performed on the three categories of fires in California from 1984-2007. The Mann-Kendall test produces a p-value of approximately 0.0025 (<0.05) shows that it is statistically significant and there is a monotonic trend in the occurrences/area of wildfire burns over the years in California. The obtained positive tau value implies that the trend is increasing.The time series analysis also indicated that there is an increasing trend in the wildfires over the years, shown in Fig. 9. 
+The Mann-Kendall test and time series was performed on the three categories of fires in California from 1984-2007. The Mann-Kendall test produces a p-value of approximately 0.0025 (<0.05), showing that it is statistically significant and there is a monotonic trend in the occurrences/area of wildfire burns over the years in California. The obtained positive tau value implies that the trend is increasing. The time series analysis also indicated that there is an increasing trend in the large wildfires over the years, shown in Figure 9. 
 
-However, due to inconsistency and large gaps in the datasets of the prescribed and wildland use fires, time series analysis could not be performed on them. To further double-check this, the Mann-Kendall test was performed again and the p-values of prescribed and wildland use fires were 0.93 and 0.68 respectively. Hence, we accept the null hypothesis and can see again that these fires are not stastically significant.
+However, due to inconsistency and large gaps in the datasets of the prescribed and wildland use fires, time series analysis could not be performed on them. To further double-check this, the Mann-Kendall test was performed again, and the p-values of prescribed and wildland use fires were 0.93 and 0.68, respectively. Hence, we accept the null hypothesis and can see again that these fires are not statistically significant.
 
-This paves way to further studies that can be done or gathered to understand this increase in wildfire severity and occurrences, which could be due to effects of climate change. 
+
+Since we know that climate change will continue to impact wildland fires globally, our analysis has allowed us to see what further questions need to be asked to get more information. Our results showed us that expanding our research to more states, years, and increased wildland fire data would allow us to see more trends and differences. With additional questions, researchers can pave the ways to further studies that can be done or gathered to understand this increase in wildfire severity and occurrences.
 
 
 \newpage
