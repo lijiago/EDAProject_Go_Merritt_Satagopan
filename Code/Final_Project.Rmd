@@ -3,8 +3,8 @@ title: "Analysis of Large Wildland Fires in California, Nevada, and Idaho"
 authors: Li Jia Go, Melissa Merritt, and Nanditha Satagopan
 date: "2022-12-14"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 editor_options:
   chunk_output_type: console
 Git Repository: https://github.com/lijiago/EDAProject_Go_Merritt_Satagopan
@@ -392,6 +392,7 @@ A time series analysis is done for wildfire by plotting mean burnt area vs. year
 wildfire_ts <- ts(wildfires_mean$Mean_fires, start = c(1984), frequency = 1)
 plot(wildfire_ts)
 
+
 #Plotting the Wildfire Time Series
 ```
 **Figure 9**: Time Series Analysis Plot of Wildfire Area from 1988-2007 in California
@@ -407,6 +408,12 @@ wildfire_TS_plot <-
   theme(plot.title = element_text(hjust = 0.5))
 
 print(wildfire_TS_plot)
+
+#Prescribed Fire Time Series
+prescribed_fire_ts <- ts(prescribed_fires_mean$Mean_fires, start = c(1984), frequency = 1)
+
+#Wildland Fire Time Series
+wildland_fire_ts <- ts(wildland_fires_mean$Mean_fires, start = c(1984), frequency = 1)
 ```
 
 **Mann-Kendall Test- Trend Analysis**
@@ -425,7 +432,7 @@ summary(mk_prescribed)
 mk_wildland <- Kendall::MannKendall(wildland_fire_ts)
 summary(mk_wildland)
 
-#The p-value of prescribed and wildland use fires are 0.93 and 0.68 respectively. Hence, we can see again that these fires are not stastically significant.
+#The p-value of prescribed and wildland use fires are 0.6374 and 0.5296 respectively. Hence, we can see again that these fires are not statistically significant.
 
 ```
 
