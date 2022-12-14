@@ -248,7 +248,7 @@ wildfires_mean <-
 ```
 
 **Figure 5**: Burnt Wildfire Area from 1988-2007 in California
-```{r, echo=TRUE, warning=FALSE, message=FALSE, include=FALSE}
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 wildfire_plot <- 
   ggplot(wildfires_mean, aes(x = YEAR, y = Mean_fires)) +
   geom_line() +
