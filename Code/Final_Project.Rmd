@@ -139,6 +139,7 @@ ggplot(California.Wildfires, aes(x = ACRES, color =as.factor(YEAR))) +
   labs(x='Acreage of fires', y='Count', color='Year', 
        title="Histogram of wildfires in 1988 & 2000, California")  
 ```
+
 **Figure 1**:  Figure showing histogram of large wildfires in 1988 and 2000, California
 
 
@@ -154,6 +155,7 @@ California.Wildfires.sf <- California.Wildfires %>%
 ```{r, echo=TRUE, warning=FALSE, message=FALSE}
 mapview(California.Wildfires.sf, zcol="YEAR")
 ```
+
 **Figure 2**: Map of location of large wildfires in California in 1988 and 2000
 
 
@@ -184,6 +186,7 @@ Wildfires_state_plot <- ggplot(Wildfire_data) +
   labs(title = "Number of Large Wildfires in U.S. States Between 1984 and 2018" )
 print(Wildfires_state_plot)
 ```
+
 **Figure 3**: Figure showing the number of large wildfires in each state with documented large wildfires from 1984-2000.
 
 
@@ -210,6 +213,7 @@ mean_firesize_plot <- ggplot(Mean_wildfire_size_state, aes(x = YEAR, y = Mean_wi
   labs(title = "Mean Wildfire Size for California, Idaho, and Nevada from 1984 through 2018")
 print(mean_firesize_plot)
 ```
+
 **Figure 4**: Figure showing the trends in mean wildfire occurrences from 1984 to 2018 in California, Idaho, and Nevada
 
 
@@ -256,6 +260,7 @@ wildfire_plot <-
 
 print(wildfire_plot)
 ```
+
 **Figure 5**: Burnt Wildfire Area from 1988-2007 in California
 
 
@@ -286,6 +291,7 @@ prescribed_fire_plot <-
 
 print(prescribed_fire_plot)
 ```
+
 **Figure 6**: Burnt Prescribed Fire Area from 1988-2007 in California
 
 
@@ -318,6 +324,7 @@ wildland_fire_plot <-
 
 print(wildland_fire_plot)
 ```
+
 **Figure 7**: Burnt Wildland Use Fire Area from 1988-2007 in California
 
 \newpage
@@ -380,6 +387,7 @@ FireSize_plot <- ggplot(States_Wildfire_data, aes(x = STATE, y = ACRES)) +
   ylim(0, 20000) 
 print(FireSize_plot)
 ```
+
 **Figure 8**: Pairwise relationships between California, Idaho, and Nevada wildfire sizes. Groupings found using the Tukey's HSD test.
 
 
@@ -409,14 +417,19 @@ wildfire_TS_plot <-
   theme(plot.title = element_text(hjust = 0.5))
 
 print(wildfire_TS_plot)
+```
 
+**Figure 9**: Time Series Analysis Plot of Wildfire Area from 1988-2007 in California
+
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
 #Prescribed Fire Time Series
 prescribed_fire_ts <- ts(prescribed_fires_mean$Mean_fires, start = c(1984), frequency = 1)
 
 #Wildland Fire Time Series
 wildland_fire_ts <- ts(wildland_fires_mean$Mean_fires, start = c(1984), frequency = 1)
 ```
-**Figure 9**: Time Series Analysis Plot of Wildfire Area from 1988-2007 in California
+
 
 
 **Mann-Kendall Test- Trend Analysis**
