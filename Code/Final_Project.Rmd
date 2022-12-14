@@ -1,15 +1,13 @@
 ---
 title: "Analysis of Large Wildland Fires in California, Nevada, and Idaho"
-authors: "Li Jia Go, Melissa Merritt, and Nanditha Satagopan"
+author: "Li Jia Go, Melissa Merritt, and Nanditha Satagopan"
 date: "2022-12-14"
 output:
   html_document: default
 editor_options:
   chunk_output_type: console
-Git Repository: https://github.com/lijiago/EDAProject_Go_Merritt_Satagopan
 ---
-output:
-  html_document: default
+Git Repository: https://github.com/lijiago/EDAProject_Go_Merritt_Satagopan
 ---
 \newpage
 \tableofcontents 
@@ -43,11 +41,11 @@ output:
 \newpage
 
 ```{r setup, include=FALSE}
-# Set your working directory
+#Set working directory
 
 getwd()
 
-# Load your packages
+#Load packages
 
 library(dplyr)
 library(scales)
